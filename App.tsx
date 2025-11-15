@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import MainContent from './components/MainContent';
+import LessonReader from './components/LessonReader';
 import AiTutor from './components/AiTutor';
 import DisciplineBrowser from './components/DisciplineBrowser';
 import Certificate from './components/Certificate';
@@ -12,7 +12,7 @@ import { disciplines } from './constants';
 import type { Discipline, Lesson, SearchResult, Level, Module } from './types';
 import { useProgress } from './hooks/useProgress';
 import { useDownloads } from './hooks/useDownloads';
-import { SpinnerIcon } from './components/Icons';
+import { SpinnerIcon, AcademicCapIcon, BookOpenIcon, BuildingIcon, ArrowRightIcon, XIcon } from './components/Icons';
 import { useMediaQuery } from './hooks/useMediaQuery';
 
 const LoadingScreen: React.FC = () => (
@@ -39,11 +39,13 @@ const App: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [isTutorOpen, setTutorOpen] = useState(!isMobile);
   const [tutorInitialPrompt, setTutorInitialPrompt] = useState<string | null>(null);
+  const [isCompletionModalOpen, setCompletionModalOpen] = useState(false);
+
 
   const {
     isLoaded,
     completedLessons,
-    markLessonAsComplete,
+    markModuleAsComplete,
     setLastViewed,
     getProgressForDiscipline,
     getLastViewedLessonData,
@@ -65,15 +67,14 @@ const App: React.FC = () => {
     return selectedDiscipline;
   }, [selectedDiscipline, selectedChapter, selectedModule]);
 
-  const { flatLessons, currentLessonIndex } = useMemo(() => {
+  const { flatLessons } = useMemo(() => {
     if (!disciplineForView) {
-      return { flatLessons: [], currentLessonIndex: -1 };
+      return { flatLessons: [] };
     }
     const lessons: Lesson[] = [];
     disciplineForView.levels.forEach(l => l.modules.forEach(m => lessons.push(...m.lessons)));
-    const idx = selectedLesson ? lessons.findIndex(l => l.id === selectedLesson.id) : -1;
-    return { flatLessons: lessons, currentLessonIndex: idx };
-  }, [disciplineForView, selectedLesson]);
+    return { flatLessons: lessons };
+  }, [disciplineForView]);
   
   const unlockedLevels = useMemo(() => {
     if (!selectedDiscipline) return new Set<string>();
@@ -157,46 +158,41 @@ const App: React.FC = () => {
     setSelectedChapter(null);
     setSelectedModule(null);
   };
-
-  const [nextLessonAfterCompletion, setNextLessonAfterCompletion] = useState<Lesson | null>(null);
-
-  useEffect(() => {
-    if (nextLessonAfterCompletion) {
-      handleSelectLesson(nextLessonAfterCompletion);
-      setNextLessonAfterCompletion(null);
-    }
-  }, [completedLessons, nextLessonAfterCompletion]);
   
-  const handleCompleteAndNext = () => {
-    if (selectedLesson) {
-      markLessonAsComplete(selectedLesson.id);
-      if (currentLessonIndex < flatLessons.length - 1) {
-        const nextLesson = flatLessons[currentLessonIndex + 1];
-        setNextLessonAfterCompletion(nextLesson);
-      }
+  const handleCompleteModule = () => {
+    if (selectedModule) {
+      const lessonIds = selectedModule.lessons.map(l => l.id);
+      markModuleAsComplete(lessonIds);
+      setCompletionModalOpen(true);
     }
   };
-  
-  const handleCompleteAndFinish = () => {
-    if (selectedLesson) {
-      markLessonAsComplete(selectedLesson.id);
-      setViewMode('CERTIFICATE');
-    }
+
+  const handleGoToNextModule = () => {
+    setCompletionModalOpen(false);
+    setViewMode('LESSON_BROWSE');
+    setSelectedModule(null);
+    setSelectedLesson(null);
+  };
+
+  const handleGoToChapters = () => {
+    setCompletionModalOpen(false);
+    setViewMode('CHAPTER_BROWSE');
+    setSelectedChapter(null);
+    setSelectedModule(null);
+    setSelectedLesson(null);
   };
   
+  const handleGoHomeFromModal = () => {
+    setCompletionModalOpen(false);
+    handleGoHome();
+  };
+
   const handleTermClick = (term: string) => {
     setTutorInitialPrompt(`Fadlan si faahfaahsan iigu sharax waxa loola jeedo "${term}" marka loo eego casharkan.`);
     if(!isTutorOpen) {
       setTutorOpen(true);
     }
   };
-
-  const isLastLessonOfLevel = useMemo(() => {
-      if (!selectedDiscipline || !selectedLesson || !selectedChapter) return false;
-      
-      const lessonsInLevel = selectedChapter.modules.flatMap(m => m.lessons);
-      return lessonsInLevel[lessonsInLevel.length - 1].id === selectedLesson.id;
-  }, [selectedDiscipline, selectedChapter, selectedLesson]);
   
   const renderContent = () => {
     switch(viewMode) {
@@ -245,17 +241,14 @@ const App: React.FC = () => {
               unlockedLevels={unlockedLevels}
               disciplineId={selectedDiscipline?.id || ''}
             />
-            <main className="flex-1 overflow-y-auto transition-all duration-300 ease-in-out bg-base-200">
-              {disciplineForView && selectedLesson ? (
-                <MainContent 
-                  key={selectedLesson.id} 
-                  lesson={selectedLesson} 
+            <main className="flex-1 overflow-y-auto transition-all duration-300 ease-in-out bg-base-100">
+              {selectedDiscipline && selectedModule ? (
+                <LessonReader 
+                  key={selectedModule.id} 
+                  module={selectedModule}
                   disciplineName={selectedDiscipline?.name || ''}
-                  isCompleted={completedLessons.has(selectedLesson.id)}
-                  onCompleteAndNext={handleCompleteAndNext}
-                  onCompleteAndFinish={handleCompleteAndFinish}
-                  isLastLessonOfDiscipline={currentLessonIndex === flatLessons.length - 1 && disciplineForView.levels.length === selectedDiscipline?.levels.length}
-                  isLastLessonOfLevel={isLastLessonOfLevel}
+                  completedLessons={completedLessons}
+                  onCompleteModule={handleCompleteModule}
                   onTermClick={handleTermClick}
                 />
               ) : (
@@ -294,6 +287,42 @@ const App: React.FC = () => {
         onGoHome={handleGoHome}
       />
       {renderContent()}
+
+      {isCompletionModalOpen && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setCompletionModalOpen(false)}>
+            <div className="bg-base-100 rounded-lg shadow-2xl p-8 max-w-lg w-full text-center relative" onClick={e => e.stopPropagation()}>
+                <button onClick={() => setCompletionModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <XIcon className="h-6 w-6" />
+                </button>
+                <AcademicCapIcon className="h-16 w-16 mx-auto text-brand-accent mb-4" />
+                <h2 className="text-2xl font-bold text-brand-primary mb-2">Hambalyo!</h2>
+                <p className="text-gray-600 mb-6">Waxaad si guul leh u dhammaysay qaybtan. Maxaad jeclaan lahayd inaad xigto?</p>
+                <div className="space-y-3">
+                    <button
+                        onClick={handleGoToNextModule}
+                        className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors"
+                    >
+                        <span className="font-semibold text-base-content">Dooro Qayb Kale</span>
+                        <BookOpenIcon className="h-6 w-6 text-brand-secondary" />
+                    </button>
+                    <button
+                        onClick={handleGoToChapters}
+                        className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors"
+                    >
+                        <span className="font-semibold text-base-content">Dib ugu laabo Cutubyada</span>
+                        <BuildingIcon className="h-6 w-6 text-brand-secondary" />
+                    </button>
+                    <button
+                        onClick={handleGoHomeFromModal}
+                        className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors"
+                    >
+                        <span className="font-semibold text-base-content">Tag Bogga Hore</span>
+                        <ArrowRightIcon className="h-6 w-6 text-brand-secondary" />
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
     </div>
   );
 };

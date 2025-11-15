@@ -195,3 +195,9 @@ export const InformationCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (p
         <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
     </svg>
 );
+
+export const BeakerIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.037-.502.068-.752.098m.752-.098a2.25 2.25 0 012.25 2.25v5.714a2.25 2.25 0 00.659 1.591L19.5 14.5M21 18h-3.375m0 0h-3.375m3.375 0V15m0 3h3.375M3 18h3.375m0 0h3.375m-3.375 0V15m0 3H3" />
+    </svg>
+);

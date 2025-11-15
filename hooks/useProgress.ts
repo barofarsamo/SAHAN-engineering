@@ -55,6 +55,19 @@ export const useProgress = () => {
     });
   }, []);
 
+  const markModuleAsComplete = useCallback((lessonIds: string[]) => {
+    setCompletedLessons(prev => {
+        const newSet = new Set(prev);
+        lessonIds.forEach(id => newSet.add(id));
+        try {
+            localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(Array.from(newSet)));
+        } catch (error) {
+            console.error("Failed to save completed lessons to localStorage", error);
+        }
+        return newSet;
+    });
+  }, []);
+
   const setLastViewed = useCallback((disciplineId: string, lessonId: string) => {
     const info = { disciplineId, lessonId };
     setLastViewedLesson(info);
@@ -137,6 +150,7 @@ export const useProgress = () => {
     isLoaded,
     completedLessons, 
     markLessonAsComplete,
+    markModuleAsComplete,
     lastViewedLessonInfo: lastViewedLesson,
     setLastViewed,
     getProgressForDiscipline,
