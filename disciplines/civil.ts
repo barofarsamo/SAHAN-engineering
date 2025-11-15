@@ -481,7 +481,50 @@ export const civilEngineeringDiscipline: Discipline = {
         modules: [
             { id: 'civil-y2-m1', title: 'Makaanikada Injineernimada', lessons: [
                 createCivilLesson('eng-mechanics', 'Engineering Mechanics (Statics & Dynamics)', { whatIsIt: "Barashada saameynta xoogaggu ku leeyihiin walxaha, marka ay nasanayaan (statics) iyo marka ay dhaqaaqayaan (dynamics)." }),
-                createCivilLesson('strength-materials', 'Strength of Materials', { whatIsIt: "Fahamka sida walxuhu uga falceliyaan culeysyada, oo ay ku jiraan stress, strain, iyo deformation." }),
+                createCivilLesson('strength-materials', 'Awoodda Walxaha (Strength of Materials)', { 
+                    whatIsIt: "Awoodda Walxaha, oo sidoo kale loo yaqaan Makaanikada Walxaha, waa laan injineernimo oo barata saameynta xoogagga dibadda ku leeyihiin walxaha adag. Waxay falanqeysaa **stress** (cadaadiska gudaha ee walaxda), **strain** (heerka ay walaxdu isu beddesho qaab ahaan), iyo xiriirka ka dhexeeya labadooda. Fikradaha asaasiga ah waxaa ka mid ah elasticity (awoodda walaxdu ugu soo laaban karto qaabkeedii hore), plasticity (qaab-beddelka joogtada ah), iyo fashilka (failure).",
+                    whyIsItImportant: "Waa aasaaska naqshad kasta oo badbaado leh oo waxtar leh ee injineernimada madaniga. La'aanteed faham qoto dheer oo ku saabsan sida walxuhu u dhaqmaan marka culeys la saaro, buundooyinku way dumi lahaayeen, dhismayaashu way dumi lahaayeen, biyo-xireennaduna way jabi lahaayeen. Waxay noo oggolaanaysaa inaan dooranno walaxda saxda ah iyo cabbirka saxda ah ee qayb kasta oo qaab-dhismeedka ah si loo hubiyo inay u adkeysato culeysyada la filayo inta ay nooshahay.",
+                    mainParts: `1. **Stress (Cadaadis):** Awoodda gudaha ee halkii bed ee walaxdu isaga caabiso culeyska dibadda (σ = F/A). Waxaa jira noocyo kala duwan:
+- **Tensile Stress:** Marka la kala jiidayo walaxda.
+- **Compressive Stress:** Marka la isku cadaadinayo walaxda.
+- **Shear Stress:** Marka xoogag is barbar socda ay isku dayaan inay walaxda kala gooyaan.
+2. **Strain (Kala-bax):** Cabirka qaab-beddelka walaxda marka loo eego cabbirkeedii asalka ahaa (ε = ΔL/L).
+3. **Stress-Strain Curve:** Garaaf muujinaya sida walaxdu uga falceliso culeyska sii kordhaya, oo muujinaya xadkeeda elastic-ka, barta dhalidda (yield point), iyo xoogga ugu dambeeya (ultimate strength).`,
+                    howItWorks: "Injineeradu waxay isticmaalaan tijaabooyin shaybaar si ay u go'aamiyaan sifooyinka farsamo ee walxaha sida birta iyo shamiitada. Xogtan, oo lagu soo bandhigo qaabka Stress-Strain Curve, ayaa loo isticmaalaa in lagu sameeyo qaacidooyin xisaabeed. Qaacidooyinkan ayaa markaa u oggolaanaya injineerada inay xisaabiyaan stress-ka iyo strain-ka ku dhici doona qaybaha qaab-dhismeedka (sida dogobyada, tiirarka) marka la saaro culeysyo la yaqaan (sida miisaanka dhismaha, dabaysha, dhulgariirka).",
+                    examples: `**Kiisaska Dhabta ah ee Adduunka:**
+
+**1. Kiiska Fashilka: Buundada Tacoma Narrows (1940)**
+- **Dhacdada:** Buundadan caanka ah ee Maraykanka waxay ku duntay afar bilood oo keliya ka dib markii la furay sababtoo ah dabayl xooggeedu ahaa 40 mayl saacaddii oo keliya. Buundadu waxay bilowday inay si daran u ruxanto (phenomenon loo yaqaan aeroelastic flutter) ilaa ay ugu dambeyntii burburtay.
+- **Mabda'a Injineernimada:** Tani waxay tusaale u tahay fashil ka dhashay **resonance** iyo **dynamic loading (culeysyo isbedbeddela)**. Inkastoo birta loo isticmaalay ay ahayd mid ku filan culeysyada taagan (static loads) sida miisaanka baabuurta, naqshadda buundada oo aad u dhuubneyd oo fududeyd ayaa ka dhigtay mid u nugul gariirka dabaysha. Marka inta jeer ee gariirka dabayshu ay la mid noqotay inta jeer ee dabiiciga ah ee buundada (natural frequency), gariirku wuu sii weynaaday ilaa uu gaaray heer uu dhaafiyay awoodda walaxdu u leedahay inay u adkeysato *stress*-ka soo noqnoqda (fatigue failure). Casharka halkan laga bartay waa muhiimadda ay leedahay in la falanqeeyo sida qaab-dhismeedyadu uga falceliyaan culeysyada isbedbeddela, ma aha oo keliya kuwa taagan.
+
+**2. Kiiska Fashilka: Burburka Jidka Lugta ee Hyatt Regency (1981)**
+- **Dhacdada:** Laba jid oo lugayn ah oo is dul saarnaa oo ku yaallay hoolka hoteelka Hyatt Regency ee Kansas City ayaa burburay, waxaana ku dhintay 114 qof. Sababtu waxay ahayd isbeddel yar oo naqshadda lagu sameeyay xilligii dhismaha oo ku saabsanaa biraha (hanger rods) sitay jidadka.
+- **Mabda'a Injineernimada:** Tani waa tusaale naxdin leh oo ku saabsan fashil ka dhashay **shear stress** iyo **bearing stress** oo xad-dhaaf ah oo ku yimid isku xirka. Naqshaddii asalka ahayd waxay isticmaaleysay hal bir oo dheer oo isku xireysay labada jidba, laakiin naqshadda la dhisay waxay isticmaashay laba bir oo kala go'an, taasoo labanlaabtay culeyska saaran lowska (nut) iyo alwaaxa (washer) ee birta sare. Culeyskani wuxuu dhaafiyay awoodda **shear strength** ee alwaaxa, taasoo keentay in lowsku uu ka duso, kaddibna uu burburku dhaco. Casharku waa sida ay muhiim u tahay in si faahfaahsan loo falanqeeyo isku xirka (connections) iyo sida culeysyadu ugu gudbaan, maxaa yeelay waa meelaha ugu nugul qaab-dhismeedka.
+
+**3. Kiiska Guusha: Dhismaha Burj Khalifa**
+- **Guusha:** Dhismaha ugu dheer adduunka, Burj Khalifa, wuxuu tusaale cajiib ah u yahay sida loo isticmaalo mabaadi'da Awoodda Walxaha si loo gaaro wax aan horay loo arag. Wuxuu adeegsadaa nidaam qaab-dhismeed "buttressed core".
+- **Mabda'a Injineernimada:** Guushu waxay ku jirtaa isticmaalka xariifnimada leh ee **walxaha awoodda sare leh (high-strength materials)**. Waxaa loo isticmaalay shamiito la xoojiyey oo leh awood aad u sarreysa (ilaa 80 MPa) si ay u qaado **compressive stress**-ka weyn ee ka dhasha miisaankiisa. Sidoo kale, waxaa loo isticmaalay birta xoojinta (rebar) si ay u qaado **tensile stress**-ka ka dhasha xoogagga dabaysha. Naqshadda dhismaha ayaa si taxaddar leh u maareysa oo u qaybisa culeysyadan, iyadoo hubinaysa in *stress*-ka ku dhacaya qayb kasta uu ka hooseeyo awoodda walaxdaas. Waa cashar ku saabsan sida isku-darka walxaha saxda ah iyo naqshad caqli-gal ah ay u suurtagelin karto in la dhiso qaab-dhismeedyo waaweyn oo badbaado leh.`,
+                    quiz: [
+                        {
+                            question: "Maxay ahayd sababta ugu weyn ee burburka Buundada Tacoma Narrows?",
+                            options: ["Culeys baabuur oo xad-dhaaf ah", "Walax tayo liidata", "Gariirka dabaysha oo la mid noqday inta jeer ee dabiiciga ah ee buundada (resonance)", "Dhulgariir"],
+                            correctAnswer: "Gariirka dabaysha oo la mid noqday inta jeer ee dabiiciga ah ee buundada (resonance)",
+                            explanation: "Burburku wuxuu ka dhashay culeysyo isbedbeddela (dynamic loads) oo ka yimid dabaysha, taasoo keentay gariir xad-dhaaf ah, ma ahayn culeys taagan (static load) oo fashiliyay."
+                        },
+                        {
+                            question: "Fashilkii Hyatt Regency, isbeddelka naqshadda wuxuu labanlaabay noocee stress ah oo saarnaa isku xirka sare?",
+                            options: ["Tensile stress", "Compressive stress", "Shear and bearing stress", "Torsional stress"],
+                            correctAnswer: "Shear and bearing stress",
+                            explanation: "Isbeddelku wuxuu culeyska oo dhan saaray hal isku xir oo sare, taasoo keentay in lowska iyo alwaaxu ay u adkeysan waayaan shear stress-ka, taasoo keentay in ay duso."
+                        },
+                        {
+                            question: "Si loo qaado culeyska weyn ee miisaankiisa, Burj Khalifa wuxuu si weyn ugu tiirsan yahay walax leh awood sare oo noocee ah?",
+                            options: ["Awoodda jiidista (Tensile Strength)", "Awoodda cadaadiska (Compressive Strength)", "Awoodda leexinta (Flexural Strength)", "Awoodda daalka (Fatigue Strength)"],
+                            correctAnswer: "Awoodda cadaadiska (Compressive Strength)",
+                            explanation: "Shamiitada awoodda sare leh ayaa loo isticmaalaa inay qaado culeyska weyn ee cadaadiska ah ee ka dhasha miisaanka dhismaha oo dhan."
+                        }
+                    ]
+                }),
             ]},
             { id: 'civil-y2-m2', title: 'Cabbirka Dhulka iyo Biyaha', lessons: [
                 createCivilLesson('surveying', 'Surveying', { whatIsIt: "Sayniska iyo farshaxanka cabbirka saxda ah ee dusha dhulka si loo qorsheeyo mashaariicda." }),
