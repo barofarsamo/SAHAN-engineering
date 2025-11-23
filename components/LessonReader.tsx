@@ -16,7 +16,8 @@ import {
     BookmarkIcon,
     ChevronDownIcon,
     ChevronRightIcon,
-    XIcon
+    XIcon,
+    ArrowUpIcon
 } from './Icons';
 import { useTTS } from '../hooks/useTTS';
 
@@ -33,90 +34,126 @@ const FONT_SERIF = "font-serif";
 const FormulaCard: React.FC<{ formula: Formula }> = ({ formula }) => {
     const [isVisible, setIsVisible] = useState(false);
 
+    // Collapsed State
     if (!isVisible) {
         return (
             <button 
                 onClick={() => setIsVisible(true)}
-                className={`w-full ${PAPER_DARKER} hover:bg-[#eaddcf] border border-[#c4bbaa] p-4 mb-6 flex items-center justify-between transition-all group shadow-sm border-l-4 border-l-[#8a1c1c]`}
+                className={`w-full ${PAPER_DARKER} hover:bg-[#eaddcf] border border-[#c4bbaa] p-5 mb-8 flex items-center justify-between transition-all duration-300 group shadow-sm border-l-4 border-l-[#8a1c1c] rounded-r-lg`}
             >
                 <div className="flex items-center">
-                    <div className="h-10 w-10 flex items-center justify-center mr-4 border-2 border-[#8a1c1c] rounded-full">
-                        <span className={`font-serif italic font-bold ${ACCENT_MAROON} text-lg`}>f(x)</span>
+                    <div className="h-12 w-12 flex items-center justify-center mr-5 border-2 border-[#8a1c1c] rounded-full bg-white group-hover:scale-105 transition-transform">
+                        <span className={`font-serif italic font-bold ${ACCENT_MAROON} text-xl`}>ƒ</span>
                     </div>
                     <div className="text-left">
-                        <p className={`text-[10px] font-bold ${INK_LIGHT} uppercase tracking-widest mb-0.5`}>Theorem</p>
-                        <h3 className={`text-lg font-bold ${INK_COLOR} ${FONT_SERIF}`}>{formula.name}</h3>
+                        <p className={`text-[10px] font-bold ${INK_LIGHT} uppercase tracking-widest mb-1`}>Mathematical Model</p>
+                        <h3 className={`text-lg md:text-xl font-bold ${INK_COLOR} ${FONT_SERIF}`}>{formula.name}</h3>
                     </div>
                 </div>
-                <div className={`flex items-center text-xs font-bold ${ACCENT_MAROON} uppercase tracking-widest`}>
-                    Expand
+                <div className={`flex items-center text-xs font-bold ${ACCENT_MAROON} uppercase tracking-widest bg-[#8a1c1c]/5 px-3 py-1.5 rounded-full`}>
+                    View Formula
                     <ChevronDownIcon className="h-4 w-4 ml-2" />
                 </div>
             </button>
         );
     }
 
+    // Expanded State
     return (
-        <div className={`${PAPER_BG} border-4 double border-[#8a1c1c] p-6 mb-8 relative group shadow-lg mx-2`}>
-             {/* Close Button */}
-             <button 
-                onClick={() => setIsVisible(false)}
-                className="absolute top-2 right-2 p-1 text-[#8a1c1c] hover:bg-[#8a1c1c]/10 rounded-full transition-colors z-20"
-                title="Close"
-             >
-                 <XIcon className="h-5 w-5" />
-             </button>
+        <div className={`relative mb-10 transition-all duration-500 ease-in-out`}>
+             {/* Main Card Container */}
+             <div className={`${PAPER_BG} border-4 double border-[#8a1c1c] p-6 md:p-8 relative shadow-xl`}>
+                 
+                 {/* Decorative Corner Triangles */}
+                 <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[#8a1c1c]"></div>
+                 <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#8a1c1c]"></div>
+                 <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#8a1c1c]"></div>
+                 <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#8a1c1c]"></div>
 
-             {/* Decorative Corner */}
-             <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-[#8a1c1c]"></div>
-             <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-[#8a1c1c]"></div>
-
-             <h3 className={`flex items-center text-xl font-bold ${INK_COLOR} mb-4 relative z-10 ${FONT_SERIF} border-b border-[#c4bbaa] pb-2`}>
-                <span className={`italic ${ACCENT_MAROON} mr-3 font-serif`}>Theorem:</span>
-                {formula.name}
-             </h3>
-
-             <div className={`${PAPER_DARKER} p-6 border border-[#c4bbaa] mb-6 text-center relative z-10`}>
-                <p className={`text-xl md:text-3xl font-serif font-bold ${INK_COLOR} tracking-wide break-words`}>{formula.equation}</p>
-                <p className={`text-sm ${INK_LIGHT} mt-3 font-serif italic border-t border-[#c4bbaa] pt-3`}>{formula.description}</p>
-             </div>
-
-             <div className="grid md:grid-cols-2 gap-8 relative z-10">
-                <div>
-                    <h4 className={`font-bold text-xs uppercase tracking-widest ${INK_LIGHT} mb-3 border-b border-[#c4bbaa] inline-block pb-1`}>
-                        Variables
-                    </h4>
-                    <ul className="space-y-1">
-                        {formula.variables.map((v, i) => (
-                            <li key={i} className="flex items-baseline text-sm p-1">
-                                <span className={`font-serif font-bold ${ACCENT_NAVY} w-8 text-right mr-3 italic`}>{v.symbol}</span>
-                                <span className={`${INK_COLOR} font-serif`}>— {v.definition}</span>
-                                {v.unit && <span className="ml-2 text-[10px] text-[#8a1c1c] font-mono">[{v.unit}]</span>}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                     <h4 className={`font-bold text-xs uppercase tracking-widest ${INK_LIGHT} mb-3 border-b border-[#c4bbaa] inline-block pb-1`}>
-                        Derivation Steps
-                     </h4>
-                     <ol className="space-y-2">
-                        {formula.steps.map((step, i) => (
-                            <li key={i} className={`flex text-sm ${INK_COLOR} font-serif`}>
-                                <span className="font-bold text-[#8a1c1c] mr-3">{i+1}.</span>
-                                <span>{step}</span>
-                            </li>
-                        ))}
-                     </ol>
-                </div>
-             </div>
-             
-             <div className="mt-6 pt-4 border-t border-[#c4bbaa] relative z-10">
-                 <div className="flex items-start">
-                    <span className={`${ACCENT_NAVY} font-serif italic font-bold mr-2`}>Application:</span>
-                    <p className={`text-sm ${INK_COLOR} font-serif italic leading-relaxed`}>"{formula.realWorldApplication}"</p>
+                 {/* Header */}
+                 <div className="flex justify-between items-start mb-6 border-b border-[#c4bbaa] pb-4">
+                     <div>
+                        <span className={`block font-serif italic ${ACCENT_MAROON} text-sm mb-1`}>Theorem / Formula</span>
+                        <h3 className={`text-2xl md:text-3xl font-bold ${INK_COLOR} ${FONT_SERIF}`}>{formula.name}</h3>
+                     </div>
+                     <button 
+                        onClick={() => setIsVisible(false)}
+                        className="p-2 text-[#8a1c1c] hover:bg-[#8a1c1c]/10 rounded-full transition-colors"
+                        title="Collapse"
+                     >
+                         <ArrowUpIcon className="h-6 w-6" />
+                     </button>
                  </div>
-             </div>
+
+                 {/* Equation Display */}
+                 <div className={`${PAPER_DARKER} p-8 border border-[#c4bbaa] mb-8 text-center shadow-inner rounded-sm`}>
+                    <p className={`text-2xl md:text-4xl font-serif font-bold ${INK_COLOR} tracking-wide break-words`}>{formula.equation}</p>
+                    {formula.description && (
+                        <p className={`text-sm ${INK_LIGHT} mt-4 font-serif italic border-t border-[#c4bbaa] pt-4`}>
+                            {formula.description}
+                        </p>
+                    )}
+                 </div>
+
+                 {/* Details Grid */}
+                 <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    {/* Left: Variables */}
+                    <div>
+                        <h4 className={`font-bold text-xs uppercase tracking-widest ${INK_LIGHT} mb-4 border-b-2 border-[#c4bbaa] inline-block pb-1`}>
+                            Defined Variables
+                        </h4>
+                        <ul className="space-y-3">
+                            {formula.variables.map((v, i) => (
+                                <li key={i} className="flex items-start text-sm group">
+                                    <span className={`font-serif font-bold ${ACCENT_NAVY} w-10 text-right mr-4 italic text-lg bg-[#eaddcf]/50 px-1 rounded`}>
+                                        {v.symbol}
+                                    </span>
+                                    <div className="flex-1 border-b border-dotted border-[#c4bbaa] pb-1">
+                                        <span className={`${INK_COLOR} font-serif`}>{v.definition}</span>
+                                        {v.unit && <span className="ml-2 text-[10px] text-[#8a1c1c] font-mono bg-[#8a1c1c]/5 px-1 rounded">[{v.unit}]</span>}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Right: Steps */}
+                    <div>
+                         <h4 className={`font-bold text-xs uppercase tracking-widest ${INK_LIGHT} mb-4 border-b-2 border-[#c4bbaa] inline-block pb-1`}>
+                            Methodology
+                         </h4>
+                         <ol className="space-y-3">
+                            {formula.steps.map((step, i) => (
+                                <li key={i} className={`flex items-start text-sm ${INK_COLOR} font-serif`}>
+                                    <span className="font-bold text-white bg-[#8a1c1c] h-5 w-5 rounded-full flex items-center justify-center text-[10px] mr-3 mt-0.5 flex-shrink-0">
+                                        {i+1}
+                                    </span>
+                                    <span className="leading-relaxed">{step}</span>
+                                </li>
+                            ))}
+                         </ol>
+                    </div>
+                 </div>
+                 
+                 {/* Footer: Application */}
+                 <div className="mt-8 pt-6 border-t-2 border-[#c4bbaa] bg-[#fdfbf7]">
+                     <div className="flex items-start bg-[#1c3d8a]/5 p-4 rounded border border-[#1c3d8a]/20">
+                        <InformationCircleIcon className={`h-6 w-6 ${ACCENT_NAVY} mr-3 flex-shrink-0 mt-1`} />
+                        <div>
+                            <span className={`${ACCENT_NAVY} font-serif italic font-bold block mb-1`}>Real-World Application:</span>
+                            <p className={`text-sm ${INK_COLOR} font-serif leading-relaxed`}>{formula.realWorldApplication}</p>
+                        </div>
+                     </div>
+                 </div>
+
+                 {/* Bottom Collapse Button */}
+                 <button 
+                    onClick={() => setIsVisible(false)}
+                    className="w-full mt-6 py-2 text-center text-xs font-bold uppercase tracking-widest text-[#8a1c1c] hover:bg-[#8a1c1c]/5 border-t border-transparent hover:border-[#8a1c1c]/20 transition-all"
+                 >
+                     Close Formula Details
+                 </button>
+            </div>
         </div>
     );
 };
@@ -126,68 +163,105 @@ const KnowledgeCheck: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
   const [revealed, setRevealed] = React.useState<Record<number, boolean>>({});
 
   if (!lesson.quiz || lesson.quiz.length === 0) {
-    return <div className={`text-center p-8 ${INK_LIGHT} font-serif italic`}>No exercises available for this chapter.</div>;
+    return null;
   }
 
   const handleAnswerSelect = (exerciseIndex: number, option: string) => {
+    // Prevent changing answer after it's revealed
+    if (revealed[exerciseIndex]) return;
+    
     setAnswers(prev => ({ ...prev, [exerciseIndex]: option }));
+    // Auto reveal on selection to give immediate feedback
     setRevealed(prev => ({ ...prev, [exerciseIndex]: true }));
   };
 
   return (
-    <div className="space-y-8">
-      {lesson.quiz.map((quizItem, index) => {
-        const selectedAnswer = answers[index];
-        const isRevealed = revealed[index];
-        
-        return (
-          <div key={index} className={`${PAPER_BG} p-6 border-y-2 border-[#c4bbaa]`}>
-            <div className="flex items-start mb-6">
-                <span className={`flex-shrink-0 text-2xl font-serif font-bold ${ACCENT_MAROON} mr-4`}>Q{index + 1}.</span>
-                <p className={`font-serif text-xl ${INK_COLOR} leading-relaxed`}>{quizItem.question}</p>
-            </div>
-            <div className="space-y-3 pl-0 md:pl-10">
-              {quizItem.options.map(option => {
-                const isSelected = selectedAnswer === option;
-                let buttonClass = 'border-[#c4bbaa] hover:bg-[#eaddcf]';
-                
-                if (isRevealed) {
-                    if (option === quizItem.correctAnswer) {
-                        buttonClass = 'border-green-700 bg-green-50 text-green-900 font-bold ring-1 ring-green-700';
-                    } else if (isSelected && option !== quizItem.correctAnswer) {
-                        buttonClass = 'border-red-700 bg-red-50 text-red-900 line-through decoration-red-900';
-                    } else {
-                        buttonClass = 'border-[#c4bbaa] opacity-50';
-                    }
-                } else if (isSelected) {
-                    buttonClass = 'border-[#1c3d8a] bg-[#1c3d8a]/10 text-[#1c3d8a] font-bold';
-                }
+    <div className="mt-16 pt-10 border-t-4 border-double border-[#c4bbaa]">
+      <div className="text-center mb-10">
+         <h2 className={`text-3xl font-serif font-bold ${INK_COLOR} mb-3`}>Knowledge Check</h2>
+         <p className={`font-serif italic ${INK_LIGHT}`}>Verify your understanding of this chapter.</p>
+         <div className="w-24 h-1 bg-[#8a1c1c] mx-auto mt-4"></div>
+      </div>
 
-                return (
-                  <button
-                    key={option}
-                    onClick={() => handleAnswerSelect(index, option)}
-                    disabled={isRevealed}
-                    className={`w-full text-left p-3 border-b-2 transition-all duration-200 text-lg font-serif flex items-center justify-between group ${buttonClass} ${INK_COLOR}`}
-                  >
-                    <span className="flex items-center">
-                        <span className={`inline-block w-4 h-4 border border-[#5e5e5e] rounded-full mr-3 ${isSelected || (isRevealed && option === quizItem.correctAnswer) ? 'bg-[#5e5e5e]' : ''}`}></span>
-                        {option}
-                    </span>
-                    {isRevealed && option === quizItem.correctAnswer && <CheckCircleIcon className="h-6 w-6 text-green-700" />}
-                  </button>
-                );
-              })}
+      <div className="space-y-8">
+        {lesson.quiz.map((quizItem, index) => {
+          const selectedAnswer = answers[index];
+          const isRevealed = revealed[index];
+          
+          return (
+            <div key={index} className={`${PAPER_BG} p-6 border-2 border-[#c4bbaa] shadow-sm relative overflow-hidden`}>
+              {/* Question Number Badge */}
+              <div className="absolute top-0 left-0 bg-[#c4bbaa] text-[#fdfbf7] px-3 py-1 font-serif font-bold text-xs">
+                  PROBLEM {index + 1}
+              </div>
+
+              <div className="mt-4 mb-6">
+                  <p className={`font-serif text-xl ${INK_COLOR} leading-relaxed font-bold`}>{quizItem.question}</p>
+              </div>
+              
+              <div className="space-y-3">
+                {quizItem.options.map(option => {
+                  const isSelected = selectedAnswer === option;
+                  const isCorrect = option === quizItem.correctAnswer;
+                  
+                  let buttonClass = 'border-[#c4bbaa] bg-white hover:bg-[#f4efe6]';
+                  let icon = <div className="w-5 h-5 rounded-full border border-gray-400"></div>;
+
+                  if (isRevealed) {
+                      if (isCorrect) {
+                          buttonClass = 'border-green-600 bg-green-50 text-green-900 ring-1 ring-green-600';
+                          icon = <CheckCircleIcon className="h-5 w-5 text-green-600" />;
+                      } else if (isSelected && !isCorrect) {
+                          buttonClass = 'border-red-600 bg-red-50 text-red-900 ring-1 ring-red-600';
+                          icon = <div className="w-5 h-5 rounded-full border-2 border-red-600 flex items-center justify-center text-xs font-bold text-red-600">✕</div>;
+                      } else {
+                          buttonClass = 'border-[#c4bbaa] opacity-50 bg-gray-50';
+                      }
+                  } else if (isSelected) {
+                      buttonClass = 'border-[#1c3d8a] bg-[#1c3d8a]/5 text-[#1c3d8a] font-bold';
+                      icon = <div className="w-5 h-5 rounded-full border-4 border-[#1c3d8a]"></div>;
+                  }
+
+                  return (
+                    <button
+                      key={option}
+                      onClick={() => handleAnswerSelect(index, option)}
+                      disabled={isRevealed}
+                      className={`w-full text-left p-4 border rounded-lg transition-all duration-200 text-lg font-serif flex items-center justify-between group ${buttonClass} ${INK_COLOR}`}
+                    >
+                      <span className="flex items-center gap-3">
+                          {icon}
+                          <span className={isRevealed && isCorrect ? 'font-bold' : ''}>{option}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Feedback Section */}
+              {isRevealed && (
+                  <div className={`mt-6 p-5 border-l-4 ${answers[index] === quizItem.correctAnswer ? 'border-green-600 bg-green-50' : 'border-[#8a1c1c] bg-[#fdfbf7] border-t border-r border-b border-gray-200'} animate-fade-in font-serif`}>
+                      <div className="flex items-start gap-3">
+                          {answers[index] === quizItem.correctAnswer ? (
+                              <LightBulbIcon className="h-6 w-6 text-green-700 mt-1 flex-shrink-0" />
+                          ) : (
+                              <InformationCircleIcon className="h-6 w-6 text-[#8a1c1c] mt-1 flex-shrink-0" />
+                          )}
+                          <div>
+                              <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${answers[index] === quizItem.correctAnswer ? 'text-green-800' : 'text-[#8a1c1c]'}`}>
+                                  {answers[index] === quizItem.correctAnswer ? 'Correct Analysis' : 'Correction'}
+                              </p>
+                              <p className={`${INK_COLOR} leading-relaxed italic`}>
+                                  {quizItem.explanation}
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+              )}
             </div>
-            {isRevealed && (
-                <div className={`mt-6 ml-0 md:ml-10 p-4 ${PAPER_DARKER} border-l-4 border-[#1c3d8a] font-serif`}>
-                    <p className={`text-xs font-bold uppercase tracking-widest ${ACCENT_NAVY} mb-2`}>Explanation</p>
-                    <p className={`${INK_COLOR} italic`}>{quizItem.explanation}</p>
-                </div>
-            )}
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   );
 };
@@ -262,7 +336,7 @@ interface LessonReaderProps {
   onTermClick: (term: string) => void;
 }
 
-type TabType = 'content' | 'quiz' | 'summary';
+type TabType = 'content' | 'summary'; // Removed 'quiz' from Tabs, it's now embedded
 type FontSize = 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
 
 const LessonReader: React.FC<LessonReaderProps> = ({ 
@@ -396,13 +470,13 @@ const LessonReader: React.FC<LessonReaderProps> = ({
 
             {/* Vintage Tabs */}
             <div className="flex px-4 border-t border-[#c4bbaa] justify-center space-x-8">
-                {['content', 'quiz', 'summary'].map((tab) => (
+                {['content', 'summary'].map((tab) => (
                     <button 
                         key={tab}
                         onClick={() => setActiveTab(tab as TabType)}
                         className={`py-2 text-sm font-serif font-bold uppercase tracking-widest border-b-4 transition-colors ${activeTab === tab ? 'border-[#8a1c1c] text-[#8a1c1c]' : 'border-transparent text-[#5e5e5e] hover:text-[#2b2b2b]'}`}
                     >
-                        {tab === 'content' ? 'Lesson' : tab === 'quiz' ? 'Exercise' : 'Summary'}
+                        {tab === 'content' ? 'Course Material' : 'Summary & Notes'}
                     </button>
                 ))}
             </div>
@@ -523,17 +597,10 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                                 onTermClick={onTermClick}
                             />
                         )}
-                    </div>
-                )}
 
-                {/* QUIZ TAB */}
-                {activeTab === 'quiz' && (
-                    <div className="max-w-2xl mx-auto">
-                        <div className="text-center mb-10 pb-6 border-b border-[#c4bbaa]">
-                            <h2 className={`text-3xl font-serif font-bold ${INK_COLOR} mb-2`}>Assessment</h2>
-                            <p className={`${INK_LIGHT} font-serif italic`}>Please verify your understanding of the concepts presented.</p>
-                        </div>
+                        {/* Knowledge Check - Now Integrated at the Bottom */}
                         <KnowledgeCheck lesson={activeLesson} />
+
                     </div>
                 )}
 
