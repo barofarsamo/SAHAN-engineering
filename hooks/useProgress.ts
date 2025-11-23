@@ -35,8 +35,8 @@ export const useProgress = () => {
       }
     };
 
-    // Set a random delay between 5 and 7 seconds
-    const randomDelay = Math.random() * (7000 - 5000) + 5000;
+    // Reduced delay for better UX
+    const randomDelay = Math.random() * (1000 - 500) + 500;
     const timer = setTimeout(loadProgress, randomDelay);
 
     return () => clearTimeout(timer); // Cleanup on unmount
@@ -146,6 +146,13 @@ export const useProgress = () => {
     return unlockedLevels;
   }, [completedLessons]);
 
+  const resetProgress = useCallback(() => {
+      setCompletedLessons(new Set());
+      setLastViewedLesson(null);
+      localStorage.removeItem(COMPLETED_LESSONS_KEY);
+      localStorage.removeItem(LAST_VIEWED_LESSON_KEY);
+  }, []);
+
   return { 
     isLoaded,
     completedLessons, 
@@ -156,5 +163,6 @@ export const useProgress = () => {
     getProgressForDiscipline,
     getLastViewedLessonData,
     getUnlockedLevels,
+    resetProgress,
   };
 };

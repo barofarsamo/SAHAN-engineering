@@ -1,3 +1,4 @@
+
 // FIX: Import React types to resolve 'Cannot find namespace React' error.
 import type * as React from 'react';
 
@@ -27,6 +28,8 @@ export interface AdditionalContent {
 export interface Lesson {
   id: string;
   title: string;
+  duration: string; // e.g., "45 min"
+  videoUrl?: string; // Optional video lecture link
   imageUrl: string;
   structuredContent: StructuredContent;
   additionalContent: AdditionalContent;

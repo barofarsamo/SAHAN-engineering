@@ -26,13 +26,6 @@ const SidebarContent: React.FC<Omit<SidebarProps, 'isMobile' | 'onClose'>> = ({
 }) => {
   const activeLessonRef = useRef<HTMLLIElement>(null);
   
-  const { flatLessons } = useMemo(() => {
-    const lessons: Lesson[] = [];
-    levels.forEach(l => l.modules.forEach(m => lessons.push(...m.lessons)));
-    return { flatLessons: lessons };
-  }, [levels]);
-
-
   useEffect(() => {
     setTimeout(() => {
        if (isOpen && activeLessonRef.current) {
@@ -53,13 +46,12 @@ const SidebarContent: React.FC<Omit<SidebarProps, 'isMobile' | 'onClose'>> = ({
   }
 
   return (
-    <>
-      <div className="overflow-y-auto flex-1 p-4">
+    <div className="overflow-y-auto flex-1 p-4 bg-base-100">
         {levels.map(level => {
           const isLevelLocked = disciplineId === 'civil-engineering' && !unlockedLevels.has(level.id);
           return (
             <div key={level.id} className="mb-6">
-              <h3 className={`text-xs font-bold uppercase tracking-wider mb-3 pl-8 flex items-center ${isLevelLocked ? 'text-gray-400/70' : 'text-gray-400'}`}>
+              <h3 className={`text-xs font-bold uppercase tracking-wider mb-3 pl-8 flex items-center ${isLevelLocked ? 'text-gray-600' : 'text-gray-400'}`}>
                 {level.name}
                 {isLevelLocked && <LockClosedIcon className="h-3 w-3 ml-2" />}
               </h3>
@@ -67,7 +59,7 @@ const SidebarContent: React.FC<Omit<SidebarProps, 'isMobile' | 'onClose'>> = ({
                 <div key={module.id} className={`relative ml-4 ${moduleIndex === level.modules.length - 1 ? '' : 'border-l-2 border-base-300'}`}>
                   <div className="mb-4">
                     <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-base-300 border-2 border-base-100"></div>
-                    <h4 className={`font-semibold pl-8 ${isLevelLocked ? 'text-gray-500' : 'text-base-content'}`}>{module.title}</h4>
+                    <h4 className={`font-semibold pl-8 ${isLevelLocked ? 'text-gray-500' : 'text-white'}`}>{module.title}</h4>
                   </div>
                   <ul className="pl-8 pb-4 space-y-3">
                     {module.lessons.map(lesson => {
@@ -79,7 +71,7 @@ const SidebarContent: React.FC<Omit<SidebarProps, 'isMobile' | 'onClose'>> = ({
                       return (
                         <li key={lesson.id} ref={lessonRef} className="relative flex items-center">
                           {isLocked ? (
-                            <div className="absolute -left-[40px] top-1/2 -translate-y-1/2 z-10 text-gray-400" title="Casharkani waa xiran yahay">
+                            <div className="absolute -left-[40px] top-1/2 -translate-y-1/2 z-10 text-gray-600" title="Casharkani waa xiran yahay">
                               <LockClosedIcon className="h-4 w-4" />
                             </div>
                           ) : (
@@ -92,10 +84,10 @@ const SidebarContent: React.FC<Omit<SidebarProps, 'isMobile' | 'onClose'>> = ({
                             onClick={() => onSelectLesson(lesson)} 
                             disabled={isLocked}
                             className={`w-full text-left text-sm transition-colors 
-                              ${isLocked ? 'text-gray-400 cursor-not-allowed' : 
+                              ${isLocked ? 'text-gray-600 cursor-not-allowed' : 
                               isSelected ? 'text-brand-secondary font-bold' : 
-                              isCompleted ? 'text-gray-800 font-medium' : 
-                              'text-gray-500 hover:text-brand-primary'}`}
+                              isCompleted ? 'text-gray-300 font-medium' : 
+                              'text-gray-400 hover:text-white'}`}
                           >
                             {lesson.title}
                           </button>
@@ -109,31 +101,30 @@ const SidebarContent: React.FC<Omit<SidebarProps, 'isMobile' | 'onClose'>> = ({
           )
         })}
       </div>
-    </>
   );
 };
 
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
-  const { levels, isOpen, isMobile, onClose } = props;
+  const { isOpen, isMobile, onClose } = props;
 
   if (isMobile) {
     return (
       <>
         <div 
-          className={`fixed inset-0 bg-black/50 z-30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={`fixed inset-0 bg-black/80 z-30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           onClick={onClose}
           aria-hidden="true"
         />
         <aside 
-          className={`fixed top-0 left-0 h-full w-4/5 max-w-sm bg-base-100 flex flex-col transition-transform duration-300 ease-in-out z-40 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          className={`fixed top-0 left-0 h-full w-4/5 max-w-sm bg-base-100 flex flex-col transition-transform duration-300 ease-in-out z-40 border-r border-base-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
           aria-label="Manhajka casharka"
         >
           <div className="p-4 border-b border-base-300 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-base-content truncate">
-              Manhajka
+            <h2 className="text-lg font-semibold text-white truncate">
+              Table of Contents
             </h2>
-            <button onClick={onClose} className="p-1 text-gray-500 hover:text-gray-800 -mr-2">
+            <button onClick={onClose} className="p-1 text-gray-400 hover:text-white -mr-2">
               <XIcon className="h-6 w-6" />
             </button>
           </div>
@@ -146,8 +137,8 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
   return (
     <aside className={`flex-shrink-0 bg-base-100 border-r border-base-300 flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'w-full md:w-80' : 'w-0'} overflow-hidden`}>
        <div className="p-4 border-b border-base-300">
-        <h2 className="text-lg font-semibold text-base-content truncate">
-          Manhajka Casharka
+        <h2 className="text-lg font-semibold text-white truncate">
+          Course Content
         </h2>
       </div>
        <SidebarContent {...props} />

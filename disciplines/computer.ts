@@ -1,0 +1,123 @@
+
+import type { Discipline, Lesson } from '../types';
+import { ChipIcon } from '../components/Icons';
+
+const createCompLesson = (id: string, title: string, content: any): Lesson => ({
+    id: `comp-${id}`,
+    title,
+    duration: "45 mins",
+    imageUrl: `https://picsum.photos/800/400?random=comp-${id}`,
+    structuredContent: {
+        whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud.' },
+        whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
+        mainParts: { title: 'Qaybaha Ugu Waaweyn', content: content.mainParts || 'Faahfaahin.' },
+        howItWorks: { title: 'Sidee Buu u Shaqeeyaa?', content: content.howItWorks || 'Habka shaqada.' },
+        prerequisites: { title: 'Maxaa Loo Baahan Yahay?', content: content.prerequisites || 'Aqoonta aasaasiga ah.' },
+        examples: { title: 'Tusaalooyin', content: content.examples || 'Tusaalooyin nolosha dhabta ah.' },
+        challenges: { title: 'Caqabadaha', content: content.challenges || 'Dhibaatooyinka.' },
+    },
+    additionalContent: {},
+    quiz: content.quiz || []
+});
+
+export const computerEngineeringDiscipline: Discipline = {
+    id: 'computer-engineering',
+    name: 'Injineernimada Kombiyuutarka',
+    icon: ChipIcon,
+    description: 'Waxay isku darsataa sayniska kombiyuutarka iyo injineernimada elektarooniga si loo horumariyo qalabka iyo software-ka kombiyuutarka.',
+    levels: [
+      {
+        id: 'comp-year-1',
+        name: 'SANADKA 1AAD: Aasaaska & Barnaamijinta',
+        description: 'Baro luqadaha barnaamijinta, xisaabta algorithms-ka, iyo fiisigiska korontada.',
+        modules: [
+          { 
+              id: 'comp-y1-prog', 
+              title: 'Programming Fundamentals (Python)', 
+              lessons: [
+                  createCompLesson('py-intro', 'Hordhaca Python', { whatIsIt: "Luqad barnaamijineed oo aad loo isticmaalo.", whyIsItImportant: "Waa luqad fudud oo awood badan.", examples: "Data Science, Web Development." }),
+                  createCompLesson('py-control', 'Control Structures', { whatIsIt: "Loops iyo If statements.", whyIsItImportant: "Waxay maamulaan socodka barnaamijka." }),
+                  createCompLesson('py-functions', 'Functions & Modules', { whatIsIt: "Qaybo koodh ah oo dib loo isticmaali karo." })
+              ] 
+          },
+          { 
+              id: 'comp-y1-math', 
+              title: 'Discrete Mathematics', 
+              lessons: [
+                  createCompLesson('math-logic', 'Propositional Logic', { whatIsIt: "Mantiqa xisaabeed.", whyIsItImportant: "Aasaaska wareegyada dijitaalka ah." }),
+                  createCompLesson('math-sets', 'Set Theory', { whatIsIt: "Barashada ururinta walxaha." })
+              ] 
+          },
+        ]
+      },
+      {
+        id: 'comp-year-2',
+        name: 'SANADKA 2AAD: Dhismaha & Xogta',
+        description: 'Faham sida kombiyuutarku u shaqeeyo min hoos ilaa kor, iyo sida xogta loo habeeyo.',
+        modules: [
+          { 
+              id: 'comp-y2-arch', 
+              title: 'Computer Architecture', 
+              lessons: [
+                  createCompLesson('arch-von-neumann', 'Von Neumann Architecture', { whatIsIt: "Qaabka kombiyuutarka casriga ah uu u dhisan yahay.", whyIsItImportant: "Waa aasaaska dhammaan CPU-yada." }),
+                  createCompLesson('arch-cpu', 'CPU Design', { whatIsIt: "Sida loo naqshadeeyo processor-ka." })
+              ] 
+          },
+          { 
+              id: 'comp-y2-dsa', 
+              title: 'Data Structures & Algorithms', 
+              lessons: [
+                  createCompLesson('dsa-arrays', 'Arrays & Linked Lists', { whatIsIt: "Hababka aasaasiga ah ee kaydinta xogta." }),
+                  createCompLesson('dsa-trees', 'Trees & Graphs', { whatIsIt: "Qaababka xogta ee isku xiran." })
+              ] 
+          },
+        ]
+      },
+      {
+        id: 'comp-year-3',
+        name: 'SANADKA 3AAD: Nidaamyada & Shabakadaha',
+        description: 'Baro sida kombiyuutaradu u wada xiriiraan iyo sida nidaamyada hawlgalka u shaqeeyaan.',
+        modules: [
+          { 
+              id: 'comp-y3-os', 
+              title: 'Operating Systems', 
+              lessons: [
+                  createCompLesson('os-intro', 'Hordhaca OS', { whatIsIt: "Software-ka maamula hardware-ka." }),
+                  createCompLesson('os-process', 'Process Management', { whatIsIt: "Sida barnaamijyadu u wada shaqeeyaan." })
+              ] 
+          },
+          { 
+              id: 'comp-y3-net', 
+              title: 'Computer Networks', 
+              lessons: [
+                  createCompLesson('net-osi', 'OSI Model', { whatIsIt: "Toddobada lakab ee isgaarsiinta." }),
+                  createCompLesson('net-tcpip', 'TCP/IP Protocol', { whatIsIt: "Luqadda Internet-ka." })
+              ] 
+          },
+        ]
+      },
+      {
+        id: 'comp-year-4',
+        name: 'SANADKA 4AAD: Tiknoolajiyada Casriga ah',
+        description: 'Mowduucyo horumarsan sida AI, Cyber Security, iyo Cloud Computing.',
+        modules: [
+          { 
+              id: 'comp-y4-ai', 
+              title: 'Artificial Intelligence', 
+              lessons: [
+                  createCompLesson('ai-ml', 'Machine Learning Basics', { whatIsIt: "Barashada sida kombiyuutarku wax u barto." }),
+                  createCompLesson('ai-nn', 'Neural Networks', { whatIsIt: "Qaabka maskaxda dadka oo lagu dayday." })
+              ] 
+          },
+          { 
+              id: 'comp-y4-security', 
+              title: 'Cybersecurity', 
+              lessons: [
+                  createCompLesson('sec-crypto', 'Cryptography', { whatIsIt: "Qarinta xogta." }),
+                  createCompLesson('sec-network', 'Network Security', { whatIsIt: "Ilaalinta shabakadaha." })
+              ] 
+          },
+        ]
+      }
+    ]
+};

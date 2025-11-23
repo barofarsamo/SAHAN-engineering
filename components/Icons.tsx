@@ -162,7 +162,6 @@ export const AcademicCapIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) 
     </svg>
 );
 
-// FIX: Add missing ArrowUpIcon to be used in MainContent.tsx
 export const ArrowUpIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
@@ -199,5 +198,17 @@ export const InformationCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (p
 export const BeakerIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.037-.502.068-.752.098m.752-.098a2.25 2.25 0 012.25 2.25v5.714a2.25 2.25 0 00.659 1.591L19.5 14.5M21 18h-3.375m0 0h-3.375m3.375 0V15m0 3h3.375M3 18h3.375m0 0h3.375m-3.375 0V15m0 3H3" />
+    </svg>
+);
+
+export const CompassIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75l3-3m0 0l3 3m-3-3v7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+export const BriefcaseIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 2.613a48.116 48.116 0 01-3.413-.387m-7.757-2.555c3.232 0 6.131.175 9.041.453m-9.422.384a48.122 48.122 0 01-3.413.387m-4.5-2.613c.24.032.48.067.72.102m-5.22 0A48.141 48.141 0 012.25 8.706v2.783c0 .62.262 1.187.682 1.583m0-4.19c-.495.706-.782 1.564-.782 2.506 0 .942.287 1.8.782 2.506m0-5.012a2.25 2.25 0 00-.782 4.19m0 0V18.4c0 1.094.787 2.036 1.872 2.18 2.087.277 4.216.42 6.378.42s4.291-.143 6.378-.42c1.085-.144 1.872-1.086 1.872-2.18v-1.558m-16.5 0v1.558" />
     </svg>
 );

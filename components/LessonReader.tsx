@@ -26,27 +26,27 @@ const KnowledgeCheck: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
   };
 
   return (
-    <div className="bg-base-200/50 p-6 rounded-lg space-y-8">
+    <div className="bg-base-200 p-6 rounded-lg space-y-8 border border-base-300">
       {lesson.quiz.map((quizItem, index) => {
         const selectedAnswer = answers[index];
         const isRevealed = revealed[index];
         
         return (
           <div key={index}>
-            <p className="font-semibold mb-3">{index + 1}. {quizItem.question}</p>
+            <p className="font-semibold mb-3 text-white">{index + 1}. {quizItem.question}</p>
             <div className="space-y-2">
               {quizItem.options.map(option => {
                 const isSelected = selectedAnswer === option;
-                let buttonClass = 'border-base-300 bg-base-100 hover:bg-base-200';
+                let buttonClass = 'border-base-300 bg-base-100 hover:bg-base-300 text-gray-300';
                 
                 if (isRevealed) {
                     if (option === quizItem.correctAnswer) {
-                        buttonClass = 'border-green-500 bg-green-500/10 text-green-800 ring-2 ring-green-500';
+                        buttonClass = 'border-green-600 bg-green-900/30 text-green-300 ring-1 ring-green-600';
                     } else if (isSelected && option !== quizItem.correctAnswer) {
-                        buttonClass = 'border-red-500 bg-red-500/10 text-red-800';
+                        buttonClass = 'border-red-600 bg-red-900/30 text-red-300';
                     }
                 } else if (isSelected) {
-                    buttonClass = 'border-brand-secondary bg-brand-secondary/10';
+                    buttonClass = 'border-brand-secondary bg-brand-secondary/20 text-brand-secondary';
                 }
 
                 return (
@@ -62,9 +62,9 @@ const KnowledgeCheck: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
               })}
             </div>
             {isRevealed && (
-                <div className="mt-3 p-3 bg-yellow-500/10 rounded-lg border-l-4 border-yellow-500">
-                    <p className="text-sm font-semibold">Fasiraad (Sixidda Khaladka):</p>
-                    <p className="text-sm text-gray-700">{quizItem.explanation}</p>
+                <div className="mt-3 p-3 bg-yellow-900/20 rounded-lg border-l-4 border-yellow-600">
+                    <p className="text-sm font-semibold text-yellow-500">Explanation:</p>
+                    <p className="text-sm text-gray-300">{quizItem.explanation}</p>
                 </div>
             )}
           </div>
@@ -99,12 +99,12 @@ const LessonReader: React.FC<LessonReaderProps> = ({
               return (
                   <span
                       key={index}
-                      className="underline text-brand-secondary font-semibold cursor-pointer hover:text-brand-accent transition-colors decoration-dotted"
+                      className="text-brand-secondary font-bold cursor-pointer hover:text-white transition-colors border-b border-dotted border-brand-secondary"
                       onClick={() => onTermClick(term)}
                       role="button"
                       tabIndex={0}
                       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onTermClick(term)}
-                      title={`Weydii AI-ga: Waa maxay ${term}?`}
+                      title={`Ask AI Tutor: What is ${term}?`}
                   >
                       {term}
                   </span>
@@ -118,11 +118,11 @@ const LessonReader: React.FC<LessonReaderProps> = ({
     if (!content) return null;
     return (
         <div className="mb-8">
-            <h3 className="text-2xl font-bold text-brand-primary flex items-center mb-4">
+            <h3 className="text-2xl font-bold text-white flex items-center mb-4">
                 {React.cloneElement(icon, { className: "h-7 w-7 mr-3 text-brand-secondary" })}
                 {title}
             </h3>
-            <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed">
+            <div className="prose prose-invert prose-lg max-w-none text-gray-300 leading-relaxed">
                 {parseTextWithTerms(content)}
             </div>
         </div>
@@ -135,61 +135,72 @@ const LessonReader: React.FC<LessonReaderProps> = ({
   const progressPercentage = totalInModule > 0 ? (completedInModule / totalInModule) * 100 : 0;
 
   return (
-    <div className="bg-base-100 min-h-full">
+    <div className="bg-base-100 min-h-full pb-20">
         <div className="p-4 md:p-8 max-w-4xl mx-auto">
             <div className="mb-8 pb-8 border-b border-base-300">
-                <p className="text-brand-secondary font-semibold mb-2">{disciplineName}</p>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary tracking-tight">{module.title}</h1>
-                <div className="w-full bg-base-200 rounded-full h-2.5 mt-6">
-                    <div className={`h-2.5 rounded-full transition-all duration-500 ${isModuleCompleted ? 'bg-green-500' : 'bg-brand-accent'}`} style={{width: `${progressPercentage}%`}}></div>
+                <p className="text-brand-secondary font-semibold mb-2 text-sm uppercase tracking-wider">{disciplineName}</p>
+                <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">{module.title}</h1>
+                <div className="w-full bg-base-300 rounded-full h-2.5 mt-6">
+                    <div className={`h-2.5 rounded-full transition-all duration-500 ${isModuleCompleted ? 'bg-green-500' : 'bg-brand-secondary'}`} style={{width: `${progressPercentage}%`}}></div>
                 </div>
             </div>
 
             {module.lessons.map((lesson, index) => (
                 <div key={lesson.id} className="py-8 mb-8 border-b-4 border-double border-base-300 last:border-b-0">
-                    <div className="mb-8">
-                        <span className="bg-brand-secondary text-white font-bold py-2 px-4 rounded-md">CASHARKA {index + 1}</span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-brand-primary mt-4">{lesson.title}</h2>
+                    <div className="mb-6 flex items-center justify-between">
+                        <div>
+                             <span className="bg-brand-secondary/20 text-brand-secondary font-bold py-1 px-3 rounded text-xs uppercase mr-2">Lesson {index + 1}</span>
+                             <span className="text-gray-400 text-xs font-mono">{lesson.duration}</span>
+                        </div>
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mt-2">{lesson.title}</h2>
                     </div>
 
-                    <figure className="my-10">
-                        <img src={lesson.imageUrl} alt={lesson.title} className="w-full h-auto rounded-lg shadow-xl" />
-                        <figcaption className="text-center text-sm text-gray-500 mt-3">Muuqaal sawireed la xiriira {lesson.title}.</figcaption>
-                    </figure>
-
-                    <div className="bg-brand-primary/5 border-l-4 border-brand-secondary rounded-r-lg p-6 mb-10">
-                         {renderSection('Maxay Muhiim u Tahay Injineernimada Madaniga?', lesson.structuredContent.whyIsItImportant.content, <InformationCircleIcon />)}
+                    {/* Video Placeholder */}
+                    <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-lg border border-base-300 mb-8 group cursor-pointer">
+                        <img src={lesson.imageUrl} alt={lesson.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-16 w-16 bg-brand-secondary rounded-full flex items-center justify-center pl-1 shadow-2xl transform group-hover:scale-110 transition-transform">
+                                <PlayIcon className="h-8 w-8 text-white" />
+                            </div>
+                        </div>
+                        <div className="absolute bottom-4 left-4">
+                             <p className="text-white font-bold text-sm bg-black/50 px-2 py-1 rounded">Watch Lecture</p>
+                        </div>
                     </div>
 
-                    {renderSection('Hordhac & Qeexitaan', lesson.structuredContent.whatIsIt.content, <LightBulbIcon />)}
-                    {renderSection('Sidee Buu u Shaqeeyaa?', lesson.structuredContent.howItWorks.content, <BeakerIcon />)}
-                    {renderSection('Tusaalooyin Dhab ah', lesson.structuredContent.examples.content, <PlayIcon />)}
-                    {renderSection('Aqoonta Lagaa Rabo', lesson.structuredContent.prerequisites.content, <BookOpenIcon />)}
+                    <div className="bg-brand-secondary/10 border-l-4 border-brand-secondary rounded-r-lg p-6 mb-10">
+                         {renderSection('Importance', lesson.structuredContent.whyIsItImportant.content, <InformationCircleIcon />)}
+                    </div>
+
+                    {renderSection('Definition', lesson.structuredContent.whatIsIt.content, <LightBulbIcon />)}
+                    {renderSection('How it Works', lesson.structuredContent.howItWorks.content, <BeakerIcon />)}
+                    {renderSection('Real World Examples', lesson.structuredContent.examples.content, <PlayIcon />)}
+                    {renderSection('Prerequisites', lesson.structuredContent.prerequisites.content, <BookOpenIcon />)}
                     
                     <div className="my-12 py-8 border-t border-b border-base-300">
-                         <h3 className="text-2xl font-bold text-brand-primary flex items-center mb-6 justify-center">
+                         <h3 className="text-2xl font-bold text-white flex items-center mb-6 justify-center">
                             <CheckCircleIcon className="h-7 w-7 mr-3 text-brand-secondary" />
-                            Hubi Fahamkaaga: {lesson.title}
+                            Knowledge Check
                         </h3>
                         <KnowledgeCheck lesson={lesson} />
                     </div>
 
-                    {renderSection('Soo Koobid', `**Soo koobid:** Casharkan waxaan si qoto dheer u eegnay **${lesson.title}**. Waxaan barannay ${lesson.structuredContent.whatIsIt.content.toLowerCase().substring(0, 100)}...`, <ClipboardListIcon />)}
+                    {renderSection('Summary', `**Soo koobid:** Casharkan waxaan si qoto dheer u eegnay **${lesson.title}**. Waxaan barannay ${lesson.structuredContent.whatIsIt.content.toLowerCase().substring(0, 100)}...`, <ClipboardListIcon />)}
                 </div>
             ))}
 
-            <div className="p-6 bg-base-200 rounded-lg shadow-inner mt-12">
+            <div className="p-6 bg-base-200 rounded-lg shadow-inner mt-12 border border-base-300">
                 {isModuleCompleted && (
-                    <div className="flex items-center justify-center px-6 py-2 bg-green-100 text-green-800 font-bold rounded-full mb-4">
+                    <div className="flex items-center justify-center px-6 py-2 bg-green-900/30 text-green-400 font-bold rounded-full mb-4 border border-green-800">
                         <CheckCircleIcon className="h-6 w-6 mr-2" />
-                        Qaybtan Waa La Dhammaystiray!
+                        Module Completed!
                     </div>
                 )}
                 <button 
                     onClick={onCompleteModule}
                     className="w-full flex items-center justify-center px-6 py-4 bg-brand-secondary text-white font-bold rounded-lg hover:bg-brand-secondary/90 transition-colors text-lg"
                 >
-                    Dhammee Qaybtan oo Dhan
+                    Mark Module as Complete
                     <AcademicCapIcon className="h-6 w-6 ml-3" />
                 </button>
             </div>
