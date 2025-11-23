@@ -97,15 +97,6 @@ const App: React.FC = () => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // Helper: Derived state for filtering lessons if needed
-  const disciplineForView = useMemo(() => {
-    if (selectedDiscipline?.id === 'civil-engineering' && selectedChapter && selectedModule) {
-      const filteredLevel = { ...selectedChapter, modules: [selectedModule] };
-      return { ...selectedDiscipline, levels: [filteredLevel] };
-    }
-    return selectedDiscipline;
-  }, [selectedDiscipline, selectedChapter, selectedModule]);
-  
   const unlockedLevels = useMemo(() => {
     if (!selectedDiscipline) return new Set<string>();
     return getUnlockedLevels(selectedDiscipline.id);
@@ -140,26 +131,6 @@ const App: React.FC = () => {
     }
     setCourseViewMode('LEARN');
     if (isMobile) setSidebarOpen(false); // Close sidebar on mobile to show content
-  };
-
-  const handleSelectLesson = (lesson: Lesson) => {
-      const lessonLevel = selectedDiscipline?.levels.find(level => 
-        level.modules.some(module => 
-            module.lessons.some(l => l.id === lesson.id)
-        )
-    );
-    
-    if (lessonLevel && !unlockedLevels.has(lessonLevel.id)) {
-        return;
-    }
-
-    setSelectedLesson(lesson);
-    if (selectedDiscipline) {
-      setLastViewed(selectedDiscipline.id, lesson.id);
-    }
-    if (isMobile) {
-      setSidebarOpen(false);
-    }
   };
   
   const handleSearchResultSelect = (result: SearchResult) => {
@@ -238,126 +209,84 @@ const App: React.FC = () => {
     return <LoadingScreen />;
   }
 
-  // --- Renders ---
-
-  // 1. Course Player View (Full Screen, hides bottom nav)
-  if (isCourseActive && selectedDiscipline) {
-      return (
-        <div className="flex flex-col h-screen font-sans bg-base-200 text-base-content overflow-hidden">
-            {/* Header hidden when reading to allow full focus, or keep if sidebar needed */}
-            {courseViewMode !== 'LEARN' && (
-                <Header 
-                    onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
-                    onToggleTutor={() => setTutorOpen(!isTutorOpen)}
-                    disciplines={disciplines}
-                    onSelectDiscipline={handleSelectDiscipline}
-                    onGoHome={handleExitCourse}
-                    isCourseView={true}
-                    courseTitle={selectedDiscipline.name}
-                />
-            )}
-            {/* Minimal Header for Learn Mode to maximize reading space */}
-            {courseViewMode === 'LEARN' && (
-                 <header className="bg-base-100 text-base-content border-b border-base-300 flex items-center justify-between p-2 h-12">
-                     <button onClick={handleGoToNextModule} className="p-1 rounded-full hover:bg-base-200">
-                         <XIcon className="h-5 w-5" />
-                     </button>
-                     <h1 className="text-xs font-bold uppercase tracking-widest text-brand-gray">{selectedDiscipline.name}</h1>
-                     <div className="flex">
-                         <button onClick={() => setTutorOpen(!isTutorOpen)} className="p-1 text-brand-secondary">
-                             <AcademicCapIcon className="h-6 w-6" />
+  // --- Render Content Logic ---
+  const renderContent = () => {
+      if (isCourseActive && selectedDiscipline) {
+          return (
+             <div className="flex flex-col h-full bg-base-100 relative">
+                 {/* Course Header - Only shown when in a course */}
+                 {courseViewMode !== 'LEARN' && (
+                    <Header 
+                        onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
+                        onToggleTutor={() => setTutorOpen(!isTutorOpen)}
+                        disciplines={disciplines}
+                        onSelectDiscipline={handleSelectDiscipline}
+                        onGoHome={handleExitCourse}
+                        isCourseView={true}
+                        courseTitle={selectedDiscipline.name}
+                    />
+                )}
+                {courseViewMode === 'LEARN' && (
+                     <header className="bg-base-100 text-base-content border-b border-base-300 flex items-center justify-between p-2 h-12 flex-shrink-0 z-30">
+                         <button onClick={handleGoToNextModule} className="p-1 rounded-full hover:bg-base-200">
+                             <XIcon className="h-5 w-5" />
                          </button>
-                     </div>
-                 </header>
-            )}
-            
-            <div className="flex flex-1 overflow-hidden relative">
-                 {/* Main Content Area based on sub-view mode */}
-                 {courseViewMode === 'CHAPTER_BROWSE' && (
-                     <ChapterBrowser discipline={selectedDiscipline} onSelectChapter={handleSelectChapter} />
-                 )}
+                         <h1 className="text-xs font-bold uppercase tracking-widest text-brand-gray">{selectedDiscipline.name}</h1>
+                         <div className="flex">
+                             <button onClick={() => setTutorOpen(!isTutorOpen)} className="p-1 text-brand-secondary">
+                                 <AcademicCapIcon className="h-6 w-6" />
+                             </button>
+                         </div>
+                     </header>
+                )}
 
-                 {courseViewMode === 'LESSON_BROWSE' && selectedChapter && (
-                     <LessonBrowser chapter={selectedChapter} onSelectModule={handleSelectModule} />
-                 )}
+                 <div className="flex-1 overflow-hidden relative flex">
+                     {courseViewMode === 'CHAPTER_BROWSE' && (
+                         <ChapterBrowser discipline={selectedDiscipline} onSelectChapter={handleSelectChapter} />
+                     )}
 
-                 {courseViewMode === 'LEARN' && (
-                    <>
-                         <main className="flex-1 overflow-hidden bg-base-100 relative">
-                             {selectedModule ? (
-                                <LessonReader 
-                                    key={selectedModule.id}
-                                    module={selectedModule}
-                                    disciplineName={selectedDiscipline.name}
-                                    completedLessons={completedLessons}
-                                    onCompleteModule={handleCompleteModule}
-                                    onTermClick={handleTermClick}
-                                />
-                             ) : (
-                                 <div className="p-8 text-center text-gray-500">Select a lesson to start learning.</div>
-                             )}
-                         </main>
-                          <AiTutor 
-                            isOpen={isTutorOpen} 
-                            selectedLesson={selectedLesson} 
-                            isMobile={isMobile}
-                            onClose={() => setTutorOpen(false)}
-                            initialPrompt={tutorInitialPrompt}
-                            onPromptHandled={() => setTutorInitialPrompt(null)}
-                        />
-                    </>
-                 )}
-                 
-                 {courseViewMode === 'CERTIFICATE' && (
-                     <Certificate disciplineName={selectedDiscipline.name} onGoHome={handleExitCourse} />
-                 )}
-            </div>
+                     {courseViewMode === 'LESSON_BROWSE' && selectedChapter && (
+                         <LessonBrowser chapter={selectedChapter} onSelectModule={handleSelectModule} />
+                     )}
 
-             {/* Completion Modal */}
-             {isCompletionModalOpen && (
-                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4" onClick={() => setCompletionModalOpen(false)}>
-                    <div className="bg-base-100 border border-base-300 rounded-lg shadow-2xl p-8 max-w-lg w-full text-center relative" onClick={e => e.stopPropagation()}>
-                        <button onClick={() => setCompletionModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-base-content">
-                            <XIcon className="h-6 w-6" />
-                        </button>
-                        <AcademicCapIcon className="h-16 w-16 mx-auto text-brand-secondary mb-4" />
-                        <h2 className="text-2xl font-bold text-base-content mb-2">Hambalyo!</h2>
-                        <p className="text-brand-gray mb-6">Waxaad si guul leh u dhammaysay qaybtan. Maxaad jeclaan lahayd inaad xigto?</p>
-                        <div className="space-y-3">
-                            <button
-                                onClick={handleGoToNextModule}
-                                className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors border border-base-300"
-                            >
-                                <span className="font-semibold text-base-content">Dooro Qayb Kale</span>
-                                <BookOpenIcon className="h-6 w-6 text-brand-secondary" />
-                            </button>
-                            <button
-                                onClick={handleGoToChapters}
-                                className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors border border-base-300"
-                            >
-                                <span className="font-semibold text-base-content">Dib ugu laabo Cutubyada</span>
-                                <BuildingIcon className="h-6 w-6 text-brand-secondary" />
-                            </button>
-                            <button
-                                onClick={handleExitCourse}
-                                className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors border border-base-300"
-                            >
-                                <span className="font-semibold text-base-content">Tag Bogga Hore</span>
-                                <ArrowRightIcon className="h-6 w-6 text-brand-secondary" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-             )}
-        </div>
-      );
-  }
+                     {courseViewMode === 'LEARN' && (
+                         <>
+                             <main className="flex-1 overflow-hidden bg-base-100 relative">
+                                 {selectedModule ? (
+                                    <LessonReader 
+                                        key={selectedModule.id}
+                                        module={selectedModule}
+                                        disciplineName={selectedDiscipline.name}
+                                        completedLessons={completedLessons}
+                                        onCompleteModule={handleCompleteModule}
+                                        onTermClick={handleTermClick}
+                                    />
+                                 ) : (
+                                     <div className="p-8 text-center text-gray-500">Select a lesson to start learning.</div>
+                                 )}
+                             </main>
+                              <AiTutor 
+                                isOpen={isTutorOpen} 
+                                selectedLesson={selectedLesson} 
+                                isMobile={isMobile}
+                                onClose={() => setTutorOpen(false)}
+                                initialPrompt={tutorInitialPrompt}
+                                onPromptHandled={() => setTutorInitialPrompt(null)}
+                            />
+                        </>
+                     )}
+                     
+                     {courseViewMode === 'CERTIFICATE' && (
+                         <Certificate disciplineName={selectedDiscipline.name} onGoHome={handleExitCourse} />
+                     )}
+                 </div>
+             </div>
+          );
+      }
 
-  // 2. Main Tabbed View (Explore, Learn, Search, etc.)
-  return (
-    <div className="flex flex-col h-screen font-sans bg-base-200 text-base-content overflow-hidden">
-        
-        <div className="flex-1 overflow-hidden relative">
+      // Default Tabs
+      return (
+        <>
             {activeTab === 'explore' && (
                 <ExploreTab 
                     disciplines={disciplines}
@@ -400,9 +329,31 @@ const App: React.FC = () => {
                     onViewCertificate={handleViewCertificate}
                 />
             )}
+        </>
+      );
+  };
+
+  return (
+    <div className="flex flex-col h-screen font-sans bg-base-200 text-base-content overflow-hidden">
+        
+        <div className="flex-1 overflow-hidden relative">
+            {renderContent()}
         </div>
 
-        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+        {/* Bottom Navigation is now ALWAYS rendered */}
+        <BottomNav activeTab={activeTab} onTabChange={(tab) => {
+             setActiveTab(tab as Tab);
+             // If navigating away from course content to another tab, exit active course mode?
+             // Or keep it? Coursera keeps state.
+             // If user clicks "Learn" or "Explore", we might want to reset course view or just switch context.
+             // For simplicity, clicking a tab exits the focused course view if you want to browse other things, 
+             // but here we just switch tabs. To return to the active course, users might click "Learn" again.
+             // However, to strictly follow "don't hide main menu sections", we keep it visible.
+             // If user explicitly clicks a tab, we exit the specific course view to show that tab's root.
+             if (isCourseActive) {
+                 setIsCourseActive(false);
+             }
+        }} />
         
         {isSettingsOpen && (
             <SettingsView 
@@ -421,6 +372,43 @@ const App: React.FC = () => {
             onClearAll={clearNotifications}
             onMarkAllRead={markAllAsRead}
         />
+
+        {/* Completion Modal attached to root */}
+         {isCompletionModalOpen && (
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[70] p-4" onClick={() => setCompletionModalOpen(false)}>
+                    <div className="bg-base-100 border border-base-300 rounded-lg shadow-2xl p-8 max-w-lg w-full text-center relative" onClick={e => e.stopPropagation()}>
+                        <button onClick={() => setCompletionModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-base-content">
+                            <XIcon className="h-6 w-6" />
+                        </button>
+                        <AcademicCapIcon className="h-16 w-16 mx-auto text-brand-secondary mb-4" />
+                        <h2 className="text-2xl font-bold text-base-content mb-2">Hambalyo!</h2>
+                        <p className="text-brand-gray mb-6">Waxaad si guul leh u dhammaysay qaybtan. Maxaad jeclaan lahayd inaad xigto?</p>
+                        <div className="space-y-3">
+                            <button
+                                onClick={handleGoToNextModule}
+                                className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors border border-base-300"
+                            >
+                                <span className="font-semibold text-base-content">Dooro Qayb Kale</span>
+                                <BookOpenIcon className="h-6 w-6 text-brand-secondary" />
+                            </button>
+                            <button
+                                onClick={handleGoToChapters}
+                                className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors border border-base-300"
+                            >
+                                <span className="font-semibold text-base-content">Dib ugu laabo Cutubyada</span>
+                                <BuildingIcon className="h-6 w-6 text-brand-secondary" />
+                            </button>
+                            <button
+                                onClick={handleExitCourse}
+                                className="w-full text-left flex items-center justify-between p-4 bg-base-200 hover:bg-base-300 rounded-lg transition-colors border border-base-300"
+                            >
+                                <span className="font-semibold text-base-content">Tag Bogga Hore</span>
+                                <ArrowRightIcon className="h-6 w-6 text-brand-secondary" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+         )}
     </div>
   );
 };

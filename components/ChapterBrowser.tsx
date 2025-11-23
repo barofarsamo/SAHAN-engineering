@@ -10,7 +10,7 @@ interface ChapterBrowserProps {
 
 const ChapterBrowser: React.FC<ChapterBrowserProps> = ({ discipline, onSelectChapter }) => {
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-base-200">
+    <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-base-200 pb-24">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <discipline.icon className="h-16 w-16 text-brand-secondary mb-4 mx-auto" />

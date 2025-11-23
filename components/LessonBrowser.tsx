@@ -10,7 +10,7 @@ interface LessonBrowserProps {
 
 const LessonBrowser: React.FC<LessonBrowserProps> = ({ chapter, onSelectModule }) => {
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-base-200">
+    <div className="flex-1 overflow-y-auto p-4 md:p-8 bg-base-200 pb-24">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-brand-primary mb-2">{chapter.name}</h1>

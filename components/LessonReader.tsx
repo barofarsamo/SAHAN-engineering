@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import type { Lesson, Module } from '../types';
+import type { Lesson, Module, Formula } from '../types';
 import { 
     CheckCircleIcon,
     AcademicCapIcon,
@@ -13,9 +13,74 @@ import {
     SpeakerIcon,
     PauseIcon,
     TextSizeIcon,
-    BookmarkIcon
+    BookmarkIcon,
+    ChevronDownIcon,
+    ChevronRightIcon
 } from './Icons';
 import { useTTS } from '../hooks/useTTS';
+
+const FormulaCard: React.FC<{ formula: Formula }> = ({ formula }) => {
+    return (
+        <div className="bg-base-200 rounded-xl border-l-4 border-brand-accent p-6 mb-8 shadow-sm animate-fade-in relative overflow-hidden group">
+             {/* Background Pattern */}
+             <div className="absolute -right-10 -top-10 opacity-5 transform rotate-12 pointer-events-none">
+                <span className="text-9xl font-serif">∫</span>
+             </div>
+
+             <h3 className="flex items-center text-lg font-bold text-base-content mb-4 relative z-10">
+                <span className="p-2 bg-brand-accent/10 rounded-lg mr-3 text-brand-accent font-mono border border-brand-accent/20">f(x)</span>
+                {formula.name}
+             </h3>
+
+             <div className="bg-base-100 p-6 rounded-lg mb-6 text-center border border-base-300 shadow-inner relative z-10">
+                <p className="text-2xl md:text-3xl font-mono font-bold text-brand-primary tracking-wider">{formula.equation}</p>
+                <p className="text-sm text-brand-gray mt-2 font-medium">{formula.description}</p>
+             </div>
+
+             <div className="grid md:grid-cols-2 gap-6 relative z-10">
+                <div>
+                    <h4 className="font-bold text-xs uppercase tracking-wider text-brand-gray mb-3 flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-brand-secondary mr-2"></span>
+                        Doorsoomayaasha (Variables)
+                    </h4>
+                    <ul className="space-y-2">
+                        {formula.variables.map((v, i) => (
+                            <li key={i} className="flex items-center justify-between text-sm bg-base-100 p-2.5 rounded border border-base-300 hover:border-brand-secondary/50 transition-colors">
+                                <div className="flex items-center">
+                                    <span className="font-mono font-bold text-brand-secondary w-8 text-center bg-brand-secondary/5 rounded py-0.5 mr-3">{v.symbol}</span>
+                                    <span className="text-base-content/90 font-medium">{v.definition}</span>
+                                </div>
+                                {v.unit && <span className="text-[10px] bg-base-200 px-2 py-1 rounded text-gray-500 font-mono border border-base-300">{v.unit}</span>}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div>
+                     <h4 className="font-bold text-xs uppercase tracking-wider text-brand-gray mb-3 flex items-center">
+                        <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                        Tallaabooyinka Xalinta
+                     </h4>
+                     <ol className="space-y-2">
+                        {formula.steps.map((step, i) => (
+                            <li key={i} className="flex text-sm text-base-content/80">
+                                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-base-300 flex items-center justify-center text-[10px] font-bold text-gray-600 mr-3 mt-0.5">{i+1}</span>
+                                <span>{step}</span>
+                            </li>
+                        ))}
+                     </ol>
+                </div>
+             </div>
+             
+             <div className="mt-6 pt-4 border-t border-base-300 relative z-10">
+                 <h4 className="font-bold text-xs uppercase tracking-wider text-brand-secondary mb-2">Codsiga Nolosha Dhabta ah</h4>
+                 <div className="flex items-start bg-brand-secondary/5 p-3 rounded-lg border border-brand-secondary/10">
+                    <LightBulbIcon className="h-5 w-5 text-brand-secondary mr-3 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-base-content italic font-medium leading-relaxed">"{formula.realWorldApplication}"</p>
+                 </div>
+             </div>
+        </div>
+    );
+};
 
 const KnowledgeCheck: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
   const [answers, setAnswers] = React.useState<Record<number, string>>({});
@@ -83,6 +148,68 @@ const KnowledgeCheck: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
       })}
     </div>
   );
+};
+
+// Interactive Section Component
+const LessonSection: React.FC<{
+    title: string;
+    content: string;
+    icon: React.ReactElement;
+    fontSize: string;
+    onTermClick: (term: string) => void;
+}> = ({ title, content, icon, fontSize, onTermClick }) => {
+    const [isOpen, setIsOpen] = useState(true);
+
+    const parseTextWithTerms = (text?: string) => {
+        if (!text) return null;
+        const parts = text.split(/(\[\[.*?\]\])/g);
+        return <span>{parts.map((part, index) => {
+            if (part.startsWith('[[') && part.endsWith(']]')) {
+                const term = part.substring(2, part.length - 2);
+                return (
+                    <span
+                        key={index}
+                        className="text-brand-secondary font-bold cursor-pointer hover:underline decoration-dotted underline-offset-4 transition-colors"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onTermClick(term);
+                        }}
+                    >
+                        {term}
+                    </span>
+                );
+            }
+            return part;
+        })}</span>;
+    };
+
+    return (
+        <section className="mb-6 animate-fade-in-up bg-base-100 border border-base-300 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <button 
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between p-4 bg-base-200/50 hover:bg-base-200 transition-colors text-left"
+            >
+                <div className="flex items-center">
+                    <span className="p-2 bg-brand-secondary/10 rounded-lg mr-3">
+                        {React.cloneElement(icon, { className: "h-5 w-5 text-brand-secondary" })}
+                    </span>
+                    <h3 className={`font-bold text-brand-primary ${fontSize === 'text-xl' ? 'text-xl' : 'text-lg'}`}>
+                        {title}
+                    </h3>
+                </div>
+                {isOpen ? 
+                    <ChevronDownIcon className="h-5 w-5 text-gray-400" /> : 
+                    <ChevronRightIcon className="h-5 w-5 text-gray-400" />
+                }
+            </button>
+            
+            {isOpen && (
+                <div className={`p-4 prose prose-base dark:prose-invert max-w-none text-base-content/80 leading-relaxed border-t border-base-300 ${fontSize}`}>
+                    {parseTextWithTerms(content)}
+                </div>
+            )}
+        </section>
+    );
 };
 
 interface LessonReaderProps {
@@ -169,51 +296,14 @@ const LessonReader: React.FC<LessonReaderProps> = ({
       }
   };
 
-  const parseTextWithTerms = (text?: string) => {
-      if (!text) return null;
-      const parts = text.split(/(\[\[.*?\]\])/g);
-      return <span>{parts.map((part, index) => {
-          if (part.startsWith('[[') && part.endsWith(']]')) {
-              const term = part.substring(2, part.length - 2);
-              return (
-                  <span
-                      key={index}
-                      className="text-brand-secondary font-bold cursor-pointer hover:underline decoration-dotted underline-offset-4 transition-colors"
-                      onClick={() => onTermClick(term)}
-                  >
-                      {term}
-                  </span>
-              );
-          }
-          return part;
-      })}</span>;
-  };
-
-  const renderSection = (title: string, content: string | undefined, icon: React.ReactElement) => {
-    if (!content) return null;
-    return (
-        <section className="mb-10 animate-fade-in-up">
-            <h3 className={`font-bold flex items-center mb-4 text-brand-primary ${fontSize === 'text-xl' ? 'text-2xl' : 'text-xl'}`}>
-                <span className="p-2 bg-brand-secondary/10 rounded-lg mr-3">
-                    {React.cloneElement(icon, { className: "h-5 w-5 text-brand-secondary" })}
-                </span>
-                {title}
-            </h3>
-            <div className={`prose prose-base dark:prose-invert max-w-none text-base-content/80 leading-relaxed ${fontSize}`}>
-                {parseTextWithTerms(content)}
-            </div>
-        </section>
-    );
-  };
-
   return (
-    <div className="flex flex-col h-full bg-base-100">
+    <div className="flex flex-col h-full bg-base-100 relative">
         {/* Top Control Bar (Sticky) */}
-        <div className="sticky top-0 z-20 bg-base-100/95 backdrop-blur-sm border-b border-base-300">
-            {/* Progress Bar */}
-            <div className="h-1 w-full bg-base-200">
+        <div className="sticky top-0 z-20 bg-base-100/95 backdrop-blur-sm border-b border-base-300 shadow-sm">
+            {/* Enhanced Progress Bar */}
+            <div className="h-1.5 w-full bg-base-200">
                 <div 
-                    className="h-full bg-brand-secondary transition-all duration-150 ease-out" 
+                    className="h-full bg-gradient-to-r from-brand-secondary to-brand-accent transition-all duration-150 ease-out shadow-[0_0_10px_rgba(0,86,210,0.5)]" 
                     style={{ width: `${scrollProgress}%` }}
                 />
             </div>
@@ -267,14 +357,14 @@ const LessonReader: React.FC<LessonReaderProps> = ({
         {/* Main Content Area */}
         <div 
             ref={contentRef}
-            className="flex-1 overflow-y-auto"
+            className="flex-1 overflow-y-auto pb-32" // Added pb-32 to allow space for nav and footer
             onScroll={handleScroll}
         >
-            <div className="max-w-3xl mx-auto p-4 md:p-8 pb-24">
+            <div className="max-w-3xl mx-auto p-4 md:p-8">
                 
                 {/* CONTENT TAB */}
                 {activeTab === 'content' && (
-                    <div className="animate-fade-in">
+                    <div className="animate-fade-in space-y-6">
                         {/* Video Header */}
                         <div className="mb-8 rounded-2xl overflow-hidden shadow-lg border border-base-300 bg-black aspect-video relative group">
                              {activeVideo && activeLesson.videoUrl ? (
@@ -306,17 +396,69 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                              )}
                         </div>
 
-                        {/* Text Content */}
-                        <div className="space-y-2">
-                             {renderSection('Qeexitaan & Faahfaahin', activeLesson.structuredContent.whatIsIt.content, <LightBulbIcon />)}
-                             <hr className="border-base-300 my-8 opacity-50" />
-                             {renderSection('Muhiimadda', activeLesson.structuredContent.whyIsItImportant.content, <InformationCircleIcon />)}
-                             {renderSection('Qaab Dhismeedka', activeLesson.structuredContent.mainParts.content, <BeakerIcon />)}
-                             {renderSection('Habka Shaqada', activeLesson.structuredContent.howItWorks.content, <ClipboardListIcon />)}
-                             <hr className="border-base-300 my-8 opacity-50" />
-                             {renderSection('Tusaalooyinka Nolosha', activeLesson.structuredContent.examples.content, <PlayIcon />)}
-                             {renderSection('Shuruudaha', activeLesson.structuredContent.prerequisites.content, <BookOpenIcon />)}
-                        </div>
+                        {/* Formula Card - Display if present */}
+                        {activeLesson.formula && <FormulaCard formula={activeLesson.formula} />}
+
+                        {/* Interactive Text Content Sections */}
+                        {activeLesson.structuredContent.whatIsIt.content && (
+                            <LessonSection 
+                                title="Qeexitaan & Faahfaahin" 
+                                content={activeLesson.structuredContent.whatIsIt.content} 
+                                icon={<LightBulbIcon />}
+                                fontSize={fontSize}
+                                onTermClick={onTermClick}
+                            />
+                        )}
+                        
+                        {(activeLesson.structuredContent.whyIsItImportant.content) && (
+                            <LessonSection 
+                                title="Muhiimadda" 
+                                content={activeLesson.structuredContent.whyIsItImportant.content} 
+                                icon={<InformationCircleIcon />}
+                                fontSize={fontSize}
+                                onTermClick={onTermClick}
+                            />
+                        )}
+
+                        {(activeLesson.structuredContent.mainParts.content) && (
+                            <LessonSection 
+                                title="Qaab Dhismeedka" 
+                                content={activeLesson.structuredContent.mainParts.content} 
+                                icon={<BeakerIcon />}
+                                fontSize={fontSize}
+                                onTermClick={onTermClick}
+                            />
+                        )}
+
+                        {(activeLesson.structuredContent.howItWorks.content) && (
+                            <LessonSection 
+                                title="Habka Shaqada" 
+                                content={activeLesson.structuredContent.howItWorks.content} 
+                                icon={<ClipboardListIcon />}
+                                fontSize={fontSize}
+                                onTermClick={onTermClick}
+                            />
+                        )}
+
+                        {(activeLesson.structuredContent.examples.content) && (
+                            <LessonSection 
+                                title="Tusaalooyinka Nolosha" 
+                                content={activeLesson.structuredContent.examples.content} 
+                                icon={<PlayIcon />}
+                                fontSize={fontSize}
+                                onTermClick={onTermClick}
+                            />
+                        )}
+
+                        {(activeLesson.structuredContent.prerequisites.content) && (
+                            <LessonSection 
+                                title="Shuruudaha" 
+                                content={activeLesson.structuredContent.prerequisites.content} 
+                                icon={<BookOpenIcon />}
+                                fontSize={fontSize}
+                                onTermClick={onTermClick}
+                            />
+                        )}
                     </div>
                 )}
 
@@ -363,7 +505,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
         </div>
 
         {/* Footer Navigation (Next/Prev) */}
-        <div className="bg-base-100 border-t border-base-300 p-4 sticky bottom-0 z-20">
+        <div className="bg-base-100 border-t border-base-300 p-4 absolute bottom-[80px] left-0 right-0 z-20 shadow-[0_-5px_10px_rgba(0,0,0,0.1)]">
              <div className="flex items-center justify-between max-w-3xl mx-auto">
                  <button 
                     onClick={handlePrevLesson}

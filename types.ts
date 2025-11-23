@@ -25,6 +25,19 @@ export interface AdditionalContent {
     comparison?: ContentSection;
 }
 
+export interface Formula {
+    name: string;
+    equation: string;
+    description: string;
+    variables: { 
+        symbol: string; 
+        definition: string; 
+        unit?: string;
+    }[];
+    steps: string[];
+    realWorldApplication: string;
+}
+
 export interface Lesson {
   id: string;
   title: string;
@@ -33,6 +46,7 @@ export interface Lesson {
   imageUrl: string;
   structuredContent: StructuredContent;
   additionalContent: AdditionalContent;
+  formula?: Formula; // New optional formula field
   quiz: {
     question: string;
     options: string[];

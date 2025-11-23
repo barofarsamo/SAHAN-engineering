@@ -1,9 +1,9 @@
 
-import type { Discipline, Lesson } from '../types';
+import type { Discipline, Lesson, Formula } from '../types';
 import { BuildingIcon } from '../components/Icons';
 
 // Helper to create standard lessons
-const createCivilLesson = (id: string, title: string, content: any, videoId?: string): Lesson => ({
+const createCivilLesson = (id: string, title: string, content: any, videoId?: string, formula?: Formula): Lesson => ({
     id: `civil-${id}`,
     title,
     duration: "45 mins",
@@ -24,6 +24,7 @@ const createCivilLesson = (id: string, title: string, content: any, videoId?: st
         skills: content.skills ? { title: 'Xirfadaha Loo Baahan Yahay', content: content.skills } : undefined,
         comparison: content.comparison ? { title: 'Isbarbardhig', content: content.comparison } : undefined,
     },
+    formula: formula,
     quiz: content.quiz || [
         { question: `Waa maxay ${title}?`, options: ['Haa', 'Maya', 'Laga yaabee', 'Ma aqaan'], correctAnswer: 'Haa', explanation: 'Sharaxaad.' },
     ],
@@ -92,7 +93,24 @@ Haddii aan dhisayno 100 mitir, kharashku waa: $500(100) + 10,000 = \$60,000$.`,
         { question: "Haddii `y` ay tahay kharashka, `x` na ay tahay tirada sibirka, waa maxay `Slope`?", options: ["Wadarta kharashka", "Kharashka halkii kiish (Unit cost)", "Kharashka gaadiidka", "Fa'iidada"], correctAnswer: "Kharashka halkii kiish (Unit cost)", explanation: "Slope (m) wuxuu qeexayaa heerka isbeddelka (Rate of change)." },
         { question: "Domain-ka function ee dhismaha matalaya wuxuu u dhigmaa:", options: ["Qiimaha mashruuca", "Xadka fiisikiga ah ee dhismaha (Physical Constraints)", "Magaca injineerka", "Taariikhda"], correctAnswer: "Xadka fiisikiga ah ee dhismaha (Physical Constraints)", explanation: "Tusaale, dhererka buundada ma noqon karo negative." }
     ]
-}, 'x_qC8a12c8E');
+}, 'x_qC8a12c8E', {
+    name: "Linear Function Model",
+    equation: "y = mx + c",
+    description: "Qaaciidada xiriirka toosan ee u dhexeeya laba doorsoome.",
+    variables: [
+        { symbol: "y", definition: "Natiijada (Output), tusaale: Kharashka guud", unit: "$" },
+        { symbol: "m", definition: "Janjeerka (Slope), tusaale: Kharashka halkii mitir", unit: "$/m" },
+        { symbol: "x", definition: "Doorsoomaha (Input), tusaale: Mitirka dhismaha", unit: "m" },
+        { symbol: "c", definition: "Sabite (Constant), tusaale: Kharashka aasaasiga ah", unit: "$" }
+    ],
+    steps: [
+        "Aqoonso qiimaha go'an (Fixed Cost) - kani waa 'c'.",
+        "Aqoonso qiimaha isbeddelaya halkii unug (Variable Cost) - kani waa 'm'.",
+        "Ku beddel qiimayaasha qaaciidada: y = mx + c.",
+        "Isticmaal qaaciidada si aad u saadaaliso kharashka mashruuc kasta adigoo beddelaya 'x'."
+    ],
+    realWorldApplication: "Waxaa loo isticmaalaa qiyaasidda kharashka dhismaha waddooyinka, halkaas oo 'm' ay tahay qiimaha halkii kiiloomitir."
+});
 
 const calc_limits = createCivilLesson('calc-2-limits', 'CASHAR 2: Limits, Continuity & Failure Analysis', {
      whatIsIt: `**Limit** waa fikradda aasaasiga ah ee Calculus, taasoo qeexaysa dhaqanka function marka uu u dhowaado qiimo go'an, xitaa haddii uusan gaarin. Injineernimada, tani waxay inta badan la xiriirtaa "Xadka" (Boundary conditions) ama waxa dhacaya marka aan u dhowaano burbur.
@@ -102,7 +120,7 @@ const calc_limits = createCivilLesson('calc-2-limits', 'CASHAR 2: Limits, Contin
 Fikirka Limit wuxuu jawaab u bixiyaa su'aasha: "Maxaa dhacaya marka waqtigu uu gaaro dhammaad ($t \to \infty$)?" ama "Maxaa dhacaya marka culeysku gaaro xadka ugu dambeeya?"`,
 
     whyIsItImportant: `1.  **Falanqaynta Burburka (Failure Analysis):** Injineerku waa inuu ogaado xadka ugu dambeeya ee dhismaha (Ultimate Limit State). Limits waxay naga caawiyaan inaan fahanno dhaqanka dhismaha marka uu ku dhow yahay inuu dumo (Asymptotes), si aan uga hortagno.
-2.  **Xiriirsanaanta Dhismaha (Structural Continuity):** Haddii waddo ay leedahay 'Discontinuity' (go'itaan), baabuurku wuu dhacayaa. Limits waxay noo ogolaanayaan inaan hubino in isku-xirka biraha iyo shubka uu yahay mid aan kala go' lahayn oo xooggu gudbi karo.
+2.  **Xiriirsanaanta Dhismaha (Structural Continuity):** Haddii a waddo ay leedahay 'Discontinuity' (go'itaan), baabuurku wuu dhacayaa. Limits waxay noo ogolaanayaan inaan hubino in isku-xirka biraha iyo shubka uu yahay mid aan kala go' lahayn oo xooggu gudbi karo.
 3.  **Xisaabinta Degdegga ah (Instantaneous Change):** Limits waa aasaaska 'Derivative-ka', kaas oo loo baahan yahay si loo ogaado xawaaraha iyo leexashada degdegga ah.`,
 
     mainParts: `**1. Qeexitaanka Rasmiga ah ee Limit:**
@@ -200,7 +218,23 @@ Kuwani dhamaantood waxay isku yihiin derivatives iyo integrals.`,
         { question: "Xiriirka ka dhexeeya Moment (M) iyo Shear Force (V) waa:", options: ["V waa derivative-ka M", "M waa derivative-ka V", "Way isku mid yihiin", "Xiriir ma laha"], correctAnswer: "V waa derivative-ka M", explanation: "dM/dx = V. Shear waa isbeddelka Moment-ka." },
         { question: "Haddii derivative-ka koowaad eber yahay (f'(x)=0), tani waxay badanaa tilmaamaysaa:", options: ["Maximum ama Minimum point", "Barta bilowga", "Barta dhamaadka", "Khalad"], correctAnswer: "Maximum ama Minimum point", explanation: "Waa barta janjeerku siman yahay (horizontal tangent), oo ah meesha ugu sarreysa ama hoosaysa." }
     ]
-}, 'WUvTyaaNkzM');
+}, 'WUvTyaaNkzM', {
+    name: "Definition of Derivative",
+    equation: "f'(x) = lim(h->0) [f(x+h) - f(x)] / h",
+    description: "Qeexitaanka rasmiga ah ee Derivative oo ku saleysan Limits.",
+    variables: [
+        { symbol: "f'(x)", definition: "Derivative-ka function-ka (Rate of change)" },
+        { symbol: "h", definition: "Isbeddel aad u yar oo ku yimid x", unit: "unitless" },
+        { symbol: "f(x)", definition: "Qiimaha asalka ah ee function-ka" }
+    ],
+    steps: [
+        "Beddel x+h gudaha function-ka asalka ah.",
+        "Ka jar f(x) natiijadaas.",
+        "U qaybi dhammaan 'h'.",
+        "Xisaabi Limit-ka marka 'h' ay u dhowaato 0."
+    ],
+    realWorldApplication: "Waa aasaaska lagu helo xawaaraha (Velocity) marka la hayo masaafada (Position)."
+});
 
 const phys_newtons_laws = createCivilLesson('phys-2-newtons-laws', 'CASHAR 7: Shuruucda Newton ee Dhismaha (Structural Mechanics)', {
     whatIsIt: `Saddexda sharci ee Sir Isaac Newton ma aha oo kaliya taariikh saynis; waa dastuurka injineernimada dhismaha. Dhisme kasta, laga soo bilaabo aqal yar ilaa buundooyinka adduunka ugu dheer, wuxuu ku taagan yahay adeecidda sharciyadan.
@@ -252,7 +286,23 @@ Biyuhu waxay xoog ku riixayaan darbiga (Action). Darbigu waa inuu ku riixaa biya
         { question: "Sharciga 1aad ee Newton wuxuu aasaas u yahay laanta injineernimada ee loo yaqaan:", options: ["Statics (Dhismaha Taagan)", "Dynamics", "Fluid Mechanics", "Thermodynamics"], correctAnswer: "Statics (Dhismaha Taagan)", explanation: "Statics waxay daraasaysaa walxaha dheellitiran (Equilibrium), taas oo ah nuxurka Sharciga 1aad." },
         { question: "Sida uu qabo Sharciga 3aad, haddii tiir 50 tan ku riixo aasaaska, imisa ayuu aasaasku soo riixayaa?", options: ["50 tan", "Ka yar 50 tan", "Ka badan 50 tan", "Eber"], correctAnswer: "50 tan", explanation: "Action iyo Reaction mar walba way is le'eg yihiin, laakiin jihooyinka ayaa kala jeeda." }
     ]
-}, 'kKKM8Y-u7ds');
+}, 'kKKM8Y-u7ds', {
+    name: "Newton's Second Law",
+    equation: "F = m × a",
+    description: "Xoogga saaran walax wuxuu la mid yahay cufka walaxda oo lagu dhuftay dardargelinta.",
+    variables: [
+        { symbol: "F", definition: "Xoogga (Force)", unit: "Newton (N)" },
+        { symbol: "m", definition: "Cufka (Mass)", unit: "Kilogram (kg)" },
+        { symbol: "a", definition: "Dardargelinta (Acceleration)", unit: "m/s²" }
+    ],
+    steps: [
+        "Aqoonso cufka walaxda (m) oo u beddel Kilogram.",
+        "Aqoonso dardargelinta (a) oo u beddel m/s².",
+        "Isku dhufo cufka iyo dardargelinta.",
+        "Natiijada u qor Newton (N)."
+    ],
+    realWorldApplication: "Wuxuu injineerka u sheegaa inta xoog ee loo baahan yahay si wiish u qaado bir culus (Cuf) oo lagu dhaqaajinayo xawaare (Dardar)."
+});
 
 export const civilEngineeringDiscipline: Discipline = {
     id: 'civil-engineering',
