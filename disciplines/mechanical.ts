@@ -9,11 +9,11 @@ const createMechLesson = (id: string, title: string, content: any, videoId?: str
     imageUrl: `https://picsum.photos/800/400?random=mech-${id}`,
     videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined,
     structuredContent: {
-        whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud.' },
-        whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
-        mainParts: { title: 'Qaybaha Ugu Waaweyn', content: content.mainParts || 'Faahfaahin.' },
-        howItWorks: { title: 'Sidee Buu u Shaqeeyaa?', content: content.howItWorks || 'Habka shaqada.' },
-        prerequisites: { title: 'Maxaa Loo Baahan Yahay?', content: content.prerequisites || 'Aqoonta aasaasiga ah.' },
+        whatIsIt: { title: 'Faahfaahin Buuxda', content: content.whatIsIt || 'Qeexitaan guud.' },
+        whyIsItImportant: { title: 'Muhiimadda', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
+        mainParts: { title: 'Qaybaha', content: content.mainParts || 'Faahfaahin.' },
+        howItWorks: { title: 'Habka Shaqada', content: content.howItWorks || 'Habka shaqada.' },
+        prerequisites: { title: 'Shuruudaha', content: content.prerequisites || 'Aqoonta aasaasiga ah.' },
         examples: { title: 'Tusaalooyin', content: content.examples || 'Tusaalooyin nolosha dhabta ah.' },
         challenges: { title: 'Caqabadaha', content: content.challenges || 'Dhibaatooyinka.' },
     },
@@ -36,7 +36,33 @@ export const mechanicalEngineeringDiscipline: Discipline = {
               id: 'mech-y1-statics', 
               title: 'Engineering Mechanics: Statics', 
               lessons: [
-                  createMechLesson('vectors', 'Force Vectors', { whatIsIt: "Xoogagga leh jihada iyo qiyaasta.", whyIsItImportant: "Aasaaska xisaabinta xoogga." }, 'w5C_lro_V9Q'),
+                  createMechLesson('vectors', 'Force Vectors & Equilibrium', { 
+                      whatIsIt: `**Engineering Statics** waa cilmiga barashada walxaha aan dhaqaaqin (ama ku socda xawaare go'an). Nuxurka casharkani waa **Force Vector**.
+Xooggu (Force) ma aha kaliya tiro (Magnitude, sida 50 Newton), ee wuxuu leeyahay jiho (Direction) iyo bar uu ka shaqeynayo (Point of application).
+
+**Vector Analysis:**
+Si aan u fahamno xoogagga, waxaan u kala jabinaa qaybaha $X$, $Y$, iyo $Z$ (Components).
+$$F = F_x \mathbf{i} + F_y \mathbf{j} + F_z \mathbf{k}$$
+Tani waxay noo ogolaaneysaa inaan isku darno xoogag badan oo jihooyin kala duwan ka imaanaya annagoo isticmaalayna xisaab fudud.
+
+**Free Body Diagrams (FBD):**
+Waa aaladda ugu muhiimsan ee injineerka. Waa sawir muujinaya walax go'doon ah iyo dhammaan xoogagga dibadda ee saaran (culeyska, xadhkaha, tiirarka). Haddii aad khalad ku samayso FBD, dhammaan xisaabtaada way khaldamaysaa.`,
+                      
+                      whyIsItImportant: `Dhisme kasta, buundo kasta, iyo mashiin kasta waa inuu ahaadaa mid "Static Equilibrium" ku jira.
+Mabda'a aasaasiga ah:
+$$\sum F = 0$$
+$$\sum M = 0$$
+Haddii wadarta xoogaggu aysan eber ahayn, walaxdu way dhaqaaqaysaa (taas oo macnaheedu yahay buundada oo dumaysa ama dhismaha oo dhacaya). Statics waa tallaabada ugu horreysa ee lagu xisaabiyo culeyska ay tahay in tiirarku qaadaan.`,
+
+                      examples: `**Tusaale: Laambad Jidka (Traffic Light):**
+Ka soo qaad laambad miisaankeedu yahay 50kg oo ay hayso laba xarig (Cable A iyo Cable B). Xarig A wuxuu sameynayaa xagal 30°, Xarig B na xagal 45°.
+Injineerku wuxuu isticmaalayaa Statics si uu u ogaado Tension-ka ku jira xarig kasta:
+1.  Iska dhig Laambadda bar (Particle).
+2.  Sawir culeyska hoos u dhacaya ($W = mg$).
+3.  Sawir Tension-ka xadhkaha.
+4.  Jebi vector-rada ($T_x = T\cos\theta$, $T_y = T\sin\theta$).
+5.  Dhig $\sum F_x = 0$ iyo $\sum F_y = 0$ si aad u hesho jawaabta.`
+                  }, 'w5C_lro_V9Q'),
                   createMechLesson('equilibrium', 'Equilibrium of Particles', { whatIsIt: "Marka wadarta xoogagga ay eber tahay." }, 'Py8254yWfT0')
               ] 
           },
@@ -44,12 +70,32 @@ export const mechanicalEngineeringDiscipline: Discipline = {
               id: 'mech-y1-thermo', 
               title: 'Thermodynamics I', 
               lessons: [
-                  createMechLesson('thermo-laws', 'Shuruucda Thermodynamics', { whatIsIt: "Sharciga 1aad iyo 2aad ee tamarta." }, '8N1BxHg9Ov8'),
-                  createMechLesson('cycles', 'Power Cycles', { whatIsIt: "Otto, Diesel, iyo Rankine cycles." }, 'hJm8sC5fGk8')
+                  createMechLesson('thermo-laws', 'Shuruucda Thermodynamics & Entropy', { 
+                      whatIsIt: `**Thermodynamics** waa barashada tamarta, kulaylka, iyo shaqada. Waa cilmiga wada matoorada baabuurta, qaboojiyayaasha, iyo gantaalaha.
+
+**1. Sharciga Koowaad (Conservation of Energy):**
+"Tamarta lama abuuri karo, lamana burburin karo, kaliya way isku beddeshaa."
+$$Q - W = \Delta U$$
+(Kulaylka la helay - Shaqada la qabtay = Isbeddelka Tamarta Gudaha).
+
+**2. Sharciga Labaad (Entropy):**
+"Kulaylku waligiis si dabiici ah ugama gudbo meel qabow oo u aado meel kulul haddii aan shaqo la qaban."
+Tani waxay soo kordhinaysaa fikradda **Entropy** (Qasnaan/Disorder). Entropy-ga koonku mar walba wuu kordhayaa. Tani waxay xaddidaysaa waxtarka (Efficiency) mashiinnada. Ma samayn kartid mashiin 100% waxtar leh sababtoo ah Sharciga 2aad.`,
+
+                      howItWorks: `Matoorka baabuurka (Internal Combustion Engine) wuxuu ku shaqeeyaa wareegga Thermodynamics (Otto Cycle):
+1.  **Intake:** Hawada iyo shidaalka ayaa la nuugaa.
+2.  **Compression:** Waa la cadaadiyaa (Temperature & Pressure way kordhaan).
+3.  **Combustion:** Waa la guba (Power stroke). Tamarta kiimikada waxay noqotaa Tamar farsamo (Work).
+4.  **Exhaust:** Qiiqa ayaa la saaraa (Kulayl lumay - Heat Rejection).`,
+
+                      whyIsItImportant: `Haddii aadan aqoon Thermodynamics, ma naqshadayn kartid mashiin waxtar leh. Injineerada waxay isticmaalaan cilmigan si ay u kordhiyaan masaafada baabuurku ku gooyo halkii litir, iyo si ay u qaboojiyaan kombiyuutarada iyo xarumaha xogta.`
+                  }, '8N1BxHg9Ov8'),
+                  createMechLesson('cycles', 'Power Cycles (Otto, Diesel, Rankine)', { whatIsIt: "Otto, Diesel, iyo Rankine cycles." }, 'hJm8sC5fGk8')
               ] 
           },
         ]
       },
+      // ... (Other years)
       {
         id: 'mech-year-2',
         name: 'SANADKA 2AAD: Dhaqdhaqaaqa & Walxaha',

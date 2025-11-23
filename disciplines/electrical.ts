@@ -9,11 +9,11 @@ const createElecLesson = (id: string, title: string, content: any, videoId?: str
     imageUrl: `https://picsum.photos/800/400?random=elec-${id}`,
     videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined,
     structuredContent: {
-        whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud.' },
-        whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
-        mainParts: { title: 'Qaybaha Ugu Waaweyn', content: content.mainParts || 'Faahfaahin.' },
-        howItWorks: { title: 'Sidee Buu u Shaqeeyaa?', content: content.howItWorks || 'Habka shaqada.' },
-        prerequisites: { title: 'Maxaa Loo Baahan Yahay?', content: content.prerequisites || 'Aqoonta aasaasiga ah.' },
+        whatIsIt: { title: 'Faahfaahin Buuxda', content: content.whatIsIt || 'Qeexitaan guud.' },
+        whyIsItImportant: { title: 'Muhiimadda', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
+        mainParts: { title: 'Qaybaha', content: content.mainParts || 'Faahfaahin.' },
+        howItWorks: { title: 'Habka Shaqada', content: content.howItWorks || 'Habka shaqada.' },
+        prerequisites: { title: 'Shuruudaha', content: content.prerequisites || 'Aqoonta aasaasiga ah.' },
         examples: { title: 'Tusaalooyin', content: content.examples || 'Tusaalooyin nolosha dhabta ah.' },
         challenges: { title: 'Caqabadaha', content: content.challenges || 'Dhibaatooyinka.' },
     },
@@ -36,22 +36,61 @@ export const electricalEngineeringDiscipline: Discipline = {
               id: 'elec-y1-circuits', 
               title: 'Circuit Theory I', 
               lessons: [
-                  createElecLesson('ohms-law', 'Sharciga Ohm & Awoodda', { whatIsIt: "V = IR.", whyIsItImportant: "Aasaaska dhammaan xisaabaadka korontada.", quiz: [{ question: "V = ?", options: ["IR", "I/R", "R/I"], correctAnswer: "IR", explanation: "Ohm's Law." }] }, 'F_vLWkkOofw'),
-                  createElecLesson('kirchhoff', 'Shuruucda Kirchhoff (KCL & KVL)', { whatIsIt: "Shuruucda socodka korontada iyo danabka.", howItWorks: "Wadarta korontada soo gasha meel waa inay la mid tahay tan ka baxda." }, 'm4jzgqYefa8'),
-                  createElecLesson('network-theorems', 'Network Theorems', { whatIsIt: "Thevenin & Norton theorems.", whyIsItImportant: "Si loo fududeeyo wareegyada adag." }, 'MDETdJ6qZAk')
+                  createElecLesson('ohms-law', 'Sharciga Ohm, Voltage, & Current', { 
+                      whatIsIt: `**Sharciga Ohm (Ohm's Law)** waa aasaaska koowaad ee injineernimada korontada. Wuxuu qeexayaa xiriirka tooska ah ee ka dhexeeya Saddexda Weyn:
+1.  **Voltage (Danab - $V$):** Waa cadaadiska ama xoogga riixaya electrons-ka. Waxaa lagu cabbiraa Volts. Ka fakar sida cadaadiska biyaha ee tuubada.
+2.  **Current (Qulqul - $I$):** Waa qulqulka dhabta ah ee electrons-ka. Waxaa lagu cabbiraa Amperes (Amps). Ka fakar sida xaddiga biyaha socda.
+3.  **Resistance (Iska-caabin - $R$):** Waa diidmada walaxda ay u diidayso qulqulka. Waxaa lagu cabbiraa Ohms ($\Omega$). Ka fakar sida tuubo dhuuban ama xiran oo biyaha celinaysa.
+
+Qaaciidada caanka ah waa:
+$$V = I \cdot R$$
+
+Tan macnaheedu waa: Si aad u kordhiso qulqulka (Current), waa inaad kordhisaa Danabka (Voltage) ama aad yaraysaa Iska-caabinta (Resistance).
+
+**Electrical Power (Awoodda):**
+Marka korontadu socoto, waxay qabataa shaqo (sida iftiin ama kulayl). Awooddaas waxaa lagu helaa:
+$$P = V \cdot I$$
+Haddii aan isticmaalno Sharciga Ohm, waxaan sidoo kale dhihi karnaa: $P = I^2 R$.`,
+
+                      whyIsItImportant: `Fahmidda xiriirkan waa lama huraan.
+*   **Badbaadada:** Haddii aad ogtahay iska-caabinta jirkaaga iyo danabka korontada, waxaad ogaan kartaa inta qulqul (Current) ah ee kugu dhacaysa haddii aad taabato fiilo qaawan. (0.1 Amp ayaa dili kara qofka).
+*   **Naqshadaynta Qalabka:** Injineerku waa inuu xisaabiyaa Resistor-ka saxda ah si uu u ilaaliyo nalka LED-ka ah inuu gubto.
+*   **Gudbinta Korontada:** Waxaan u isticmaalnaa Voltage sare (High Voltage) xadhkaha waaweyn si aan u yarayno Current-ka, taas oo iyaduna yaraynaysa lumista awoodda ($P_{lost} = I^2R$).`,
+
+                      howItWorks: `**Atomic Level:**
+Maaddada sida naxaasta (Copper) waxay leedahay electrons xor ah oo diyaar u ah inay dhaqaaqaan. Marka aan ku xirno Batariga, dhinaca Positive-ka ah wuxuu soo jiitaa electrons-ka (kuwaas oo ah Negative). Dhaqdhaqaaqaas wadajirka ah waa waxa aan u naqaano **Current**.
+Iska-caabinta (Resistance) waxay timaadaa marka electrons-ku ay ku dhacaan atam-yada kale ee birta, taasoo dhalisa kulayl (Joule Heating).`,
+                      
+                      quiz: [{ question: "Haddii $V$ ay kordho iyadoo $R$ ay joogto tahay, maxaa ku dhaca $I$?", options: ["Way kordhaysaa", "Way yaraanaysaa", "Isma beddelayso", "Eber bay noqonaysaa"], correctAnswer: "Way kordhaysaa", explanation: "V iyo I waa Directly Proportional ($V=IR$)." }] 
+                  }, 'F_vLWkkOofw'),
+                  createElecLesson('kirchhoff', 'Shuruucda Kirchhoff (KCL & KVL)', { 
+                      whatIsIt: `Halka Sharciga Ohm uu ka shaqeeyo hal qayb (component), **Shuruucda Kirchhoff** waxay xalliyaan shabakado waaweyn oo isku-dhafan.
+Waxaa jira laba sharci oo waaweyn:
+1.  **Kirchhoff's Current Law (KCL):**
+    "Wadarta Current-ka soo gala gunti (node) waa inay la mid noqotaa wadarta Current-ka ka baxa."
+    $$\sum I_{in} = \sum I_{out}$$
+    *Mabda'a:* Conservation of Charge (Koorontadu ma lunto, meelna kama soo baxdo iyadoon meel kale ka iman).
+
+2.  **Kirchhoff's Voltage Law (KVL):**
+    "Wadarta Voltage-ka ee wareeg xiran (closed loop) waa inay noqotaa eber."
+    $$\sum V = 0$$
+    Tan macnaheedu waa: Tamarta batariga bixiyo waxaa wada isticmaala qaybaha wareegga ku jira (Resistors, etc.).
+
+**Node & Mesh Analysis:**
+Kuwani waa habab xisaabeed (Matrix algebra) oo la adeegsado KCL iyo KVL si loo xalliyo wareegyo leh boqolaal qaybood.`,
+
+                      examples: `**Tusaale Dhab ah: Gurigaaga**
+*   **KCL:** Barta ay korontadu ka soo gasho gurigaaga (Main Breaker) waa 'Node'. Korontada halkaas soo gasha waxay u qaybsantaa qolalka kala duwan. Wadarta korontada qolalka oo dhan waa inay la mid noqotaa tan soo gashay.
+*   **KVL:** Haddii aad haysato silsilad nalal ah (Christmas lights in series), Voltage-ka guud ee 220V wuxuu u qaybsamayaa nalalka. Haddii hal nal uu isticmaalo Voltage badan, kuwa kale way daciifayaan.`
+                  }, 'm4jzgqYefa8'),
+                  createElecLesson('network-theorems', 'Network Theorems (Thevenin & Norton)', { whatIsIt: "Thevenin & Norton theorems.", whyIsItImportant: "Si loo fududeeyo wareegyada adag." }, 'MDETdJ6qZAk')
               ] 
           },
-          { 
-              id: 'elec-y1-digital', 
-              title: 'Digital Logic Design', 
-              lessons: [
-                  createElecLesson('logic-gates', 'Logic Gates (AND, OR, NOT)', { whatIsIt: "Dhismayaasha kombiyuutarka.", whyIsItImportant: "Waxay sameeyaan go'aamada dijitaalka ah." }, 'gI-qXk7XojA'),
-                  createElecLesson('boolean', 'Boolean Algebra', { whatIsIt: "Xisaabta logic-ga." }, 'm5Y1906a5_U')
-              ] 
-          },
+          // ... (Rest of electrical structure)
         ]
       },
-      {
+      // ... (Other years)
+       {
         id: 'elec-year-2',
         name: 'SANADKA 2AAD: Elektarooniga & Calaamadaha',
         description: 'U gudub qalabka elektarooniga ah sida transistors iyo falanqaynta calaamadaha.',
