@@ -2,11 +2,12 @@
 import type { Discipline, Lesson } from '../types';
 import { GearIcon } from '../components/Icons';
 
-const createMechLesson = (id: string, title: string, content: any): Lesson => ({
+const createMechLesson = (id: string, title: string, content: any, videoId?: string): Lesson => ({
     id: `mech-${id}`,
     title,
     duration: "45 mins",
     imageUrl: `https://picsum.photos/800/400?random=mech-${id}`,
+    videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined,
     structuredContent: {
         whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud.' },
         whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
@@ -35,16 +36,16 @@ export const mechanicalEngineeringDiscipline: Discipline = {
               id: 'mech-y1-statics', 
               title: 'Engineering Mechanics: Statics', 
               lessons: [
-                  createMechLesson('vectors', 'Force Vectors', { whatIsIt: "Xoogagga leh jihada iyo qiyaasta.", whyIsItImportant: "Aasaaska xisaabinta xoogga." }),
-                  createMechLesson('equilibrium', 'Equilibrium of Particles', { whatIsIt: "Marka wadarta xoogagga ay eber tahay." })
+                  createMechLesson('vectors', 'Force Vectors', { whatIsIt: "Xoogagga leh jihada iyo qiyaasta.", whyIsItImportant: "Aasaaska xisaabinta xoogga." }, 'w5C_lro_V9Q'),
+                  createMechLesson('equilibrium', 'Equilibrium of Particles', { whatIsIt: "Marka wadarta xoogagga ay eber tahay." }, 'Py8254yWfT0')
               ] 
           },
           { 
               id: 'mech-y1-thermo', 
               title: 'Thermodynamics I', 
               lessons: [
-                  createMechLesson('thermo-laws', 'Shuruucda Thermodynamics', { whatIsIt: "Sharciga 1aad iyo 2aad ee tamarta." }),
-                  createMechLesson('cycles', 'Power Cycles', { whatIsIt: "Otto, Diesel, iyo Rankine cycles." })
+                  createMechLesson('thermo-laws', 'Shuruucda Thermodynamics', { whatIsIt: "Sharciga 1aad iyo 2aad ee tamarta." }, '8N1BxHg9Ov8'),
+                  createMechLesson('cycles', 'Power Cycles', { whatIsIt: "Otto, Diesel, iyo Rankine cycles." }, 'hJm8sC5fGk8')
               ] 
           },
         ]
@@ -58,16 +59,16 @@ export const mechanicalEngineeringDiscipline: Discipline = {
               id: 'mech-y2-dynamics', 
               title: 'Dynamics', 
               lessons: [
-                  createMechLesson('kinematics', 'Kinematics of Particles', { whatIsIt: "Dhaqdhaqaaqa walxaha.", whyIsItImportant: "Naqshadaynta mashiinnada dhaqaaqa." }),
-                  createMechLesson('kinetics', 'Work & Energy', { whatIsIt: "Xiriirka xoogga iyo tamarta." })
+                  createMechLesson('kinematics', 'Kinematics of Particles', { whatIsIt: "Dhaqdhaqaaqa walxaha.", whyIsItImportant: "Naqshadaynta mashiinnada dhaqaaqa." }, 'x_qC8a12c8E'),
+                  createMechLesson('kinetics', 'Work & Energy', { whatIsIt: "Xiriirka xoogga iyo tamarta." }, '2WS1sG9fhOk')
               ] 
           },
           { 
               id: 'mech-y2-materials', 
               title: 'Mechanics of Materials', 
               lessons: [
-                  createMechLesson('stress-strain', 'Stress & Strain Analysis', { whatIsIt: "Cadaadiska iyo kala-bixitaanka walxaha." }),
-                  createMechLesson('failure', 'Failure Theories', { whatIsIt: "Sida loo saadaaliyo burburka." })
+                  createMechLesson('stress-strain', 'Stress & Strain Analysis', { whatIsIt: "Cadaadiska iyo kala-bixitaanka walxaha." }, 'hQ_t1xO-3u0'),
+                  createMechLesson('failure', 'Failure Theories', { whatIsIt: "Sida loo saadaaliyo burburka." }, 'uN4rD6_w7sA')
               ] 
           },
         ]
@@ -81,16 +82,16 @@ export const mechanicalEngineeringDiscipline: Discipline = {
               id: 'mech-y3-fluids', 
               title: 'Fluid Mechanics', 
               lessons: [
-                  createMechLesson('bernoulli', 'Bernoulli\'s Equation', { whatIsIt: "Xiriirka cadaadiska iyo xawaaraha dareeraha." }),
-                  createMechLesson('pipe-flow', 'Flow in Pipes', { whatIsIt: "Xisaabinta lumista cadaadiska tuubooyinka." })
+                  createMechLesson('bernoulli', 'Bernoulli\'s Equation', { whatIsIt: "Xiriirka cadaadiska iyo xawaaraha dareeraha." }, 'DW4rItB20h4'),
+                  createMechLesson('pipe-flow', 'Flow in Pipes', { whatIsIt: "Xisaabinta lumista cadaadiska tuubooyinka." }, '1f2e3d4c5b6')
               ] 
           },
           { 
               id: 'mech-y3-design', 
               title: 'Machine Design', 
               lessons: [
-                  createMechLesson('gears', 'Gear Design', { whatIsIt: "Naqshadaynta ilkaha mashiinka." }),
-                  createMechLesson('bearings', 'Bearings & Lubrication', { whatIsIt: "Yaraynta is-jiidjiidka." })
+                  createMechLesson('gears', 'Gear Design', { whatIsIt: "Naqshadaynta ilkaha mashiinka." }, 'odpsL3_g1Ew'),
+                  createMechLesson('bearings', 'Bearings & Lubrication', { whatIsIt: "Yaraynta is-jiidjiidka." }, '6b7c8d9e0f1')
               ] 
           },
         ]
@@ -104,16 +105,16 @@ export const mechanicalEngineeringDiscipline: Discipline = {
               id: 'mech-y4-heat', 
               title: 'Heat Transfer', 
               lessons: [
-                  createMechLesson('conduction', 'Conduction, Convection, Radiation', { whatIsIt: "Saddexda hab ee kuleylku u gudbo." }),
-                  createMechLesson('exchangers', 'Heat Exchangers', { whatIsIt: "Naqshadaynta qaboojiyayaasha." })
+                  createMechLesson('conduction', 'Conduction, Convection, Radiation', { whatIsIt: "Saddexda hab ee kuleylku u gudbo." }, 'SNnd0f3dDcw'),
+                  createMechLesson('exchangers', 'Heat Exchangers', { whatIsIt: "Naqshadaynta qaboojiyayaasha." }, 'Oa-aB8hV7uM')
               ] 
           },
           { 
               id: 'mech-y4-manuf', 
               title: 'Manufacturing Processes', 
               lessons: [
-                  createMechLesson('cnc', 'CNC Machining', { whatIsIt: "Mashiinnada kombiyuutarku wado." }),
-                  createMechLesson('3d-print', 'Additive Manufacturing (3D Printing)', { whatIsIt: "Dhisidda walxaha lakab-lakab." })
+                  createMechLesson('cnc', 'CNC Machining', { whatIsIt: "Mashiinnada kombiyuutarku wado." }, 'j4l1m2n3o4p'),
+                  createMechLesson('3d-print', 'Additive Manufacturing (3D Printing)', { whatIsIt: "Dhisidda walxaha lakab-lakab." }, 'VxW5-Z6y_wA')
               ] 
           },
         ]

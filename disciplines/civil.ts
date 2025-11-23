@@ -3,11 +3,12 @@ import type { Discipline, Lesson } from '../types';
 import { BuildingIcon } from '../components/Icons';
 
 // Helper to create standard lessons
-const createCivilLesson = (id: string, title: string, content: any): Lesson => ({
+const createCivilLesson = (id: string, title: string, content: any, videoId?: string): Lesson => ({
     id: `civil-${id}`,
     title,
     duration: "45 mins",
     imageUrl: `https://picsum.photos/800/400?random=${id}`,
+    videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined,
     structuredContent: {
         whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud oo ku saabsan mawduucan.' },
         whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda mawduucan.' },
@@ -28,9 +29,6 @@ const createCivilLesson = (id: string, title: string, content: any): Lesson => (
     ],
 });
 
-// --- YEAR 1: CALCULUS I & PHYSICS I ---
-// (Re-using existing content logic but ensuring updated helper is used)
-
 const calc_functions = createCivilLesson('calc-1-functions', 'CASHAR 1: Functions & Modeling', {
     whatIsIt: "Injineernimada dhismaha, **Function** waa sharci xisaabeed isku xiraya 'Input' (sida culeyska saaran buundo) iyo 'Output' (sida inta ay buundadaasi leexanayso/deflection). Waa luqadda aan ku qeexno xiriirka ka dhexeeya doorsoomayaasha fiisikiga ah.",
     whyIsItImportant: "Kahor intaan dhagax la dhigin, injineerku wuxuu isticmaalaa functions si uu u saadaaliyo dhaqanka dhismaha. Waxay noo ogolaanayaan inaan xisaabino badbaadada, kharashka, iyo cimriga dhismaha annagoo aan weli dhisin.",
@@ -47,8 +45,8 @@ const calc_functions = createCivilLesson('calc-1-functions', 'CASHAR 1: Function
         { question: "Haddii `y` ay tahay kharashka, `x` na ay tahay tirada sibirka, waa maxay `Slope`?", options: ["Wadarta kharashka", "Kharashka halkii kiish (Unit cost)", "Kharashka gaadiidka", "Fa'iidada"], correctAnswer: "Kharashka halkii kiish (Unit cost)", explanation: "Slope (m) wuxuu qeexayaa heerka isbeddelka (Rate of change)." },
         { question: "Domain-ka function ee dhismaha matalaya wuxuu u dhigmaa:", options: ["Qiimaha mashruuca", "Xadka fiisikiga ah ee dhismaha (Physical Constraints)", "Magaca injineerka", "Taariikhda"], correctAnswer: "Xadka fiisikiga ah ee dhismaha (Physical Constraints)", explanation: "Tusaale, dhererka buundada ma noqon karo negative." }
     ]
-});
-// ... (Including all previous civil lessons with new duration field)
+}, 'x_qC8a12c8E');
+
 const calc_limits = createCivilLesson('calc-2-limits', 'CASHAR 2: Limits & Continuity', {
      whatIsIt: "**Limit** waa fikradda aasaasiga ah ee Calculus, taasoo qeexaysa dhaqanka function marka uu u dhowaado qiimo go'an, xitaa haddii uusan gaarin. **Continuity** (Xiriirsanaan) waa marka dhismaha function-ku uusan lahayn wax go'itaan ah.",
     whyIsItImportant: "Dhismayaasha waa inay ahaadaan kuwo 'Continuous'. Haddii waddo ay leedahay 'Discontinuity' (go'itaan), baabuurku wuu dhacayaa. Limits waxay noo ogolaanayaan inaan fahamno waxa dhacaya marka aan gaarno xadka ugu dambeeya ee badbaadada (Ultimate Limit State).",
@@ -61,7 +59,8 @@ const calc_limits = createCivilLesson('calc-2-limits', 'CASHAR 2: Limits & Conti
     quiz: [
         { question: "Haddii $\\lim_{x \\to 2} f(x) = 5$ laakiin $f(2) = 3$, function-ku ma 'Continuous' baa?", options: ["Haa", "Maya", "Mararka qaar", "Lama ogaan karo"], correctAnswer: "Maya", explanation: "Si uu continuous u noqdo, Limit-ka iyo qiimaha dhabta ah waa inay isku mid noqdaan." }
     ]
-});
+}, '3bIk3pKg0Vo');
+
 const calc_derivatives = createCivilLesson('calc-3-derivatives', 'CASHAR 3: Derivatives (Hos-timaad)', {
     whatIsIt: "**Derivative** (Hos-timaad) waa cabbirka sida degdegga ah ee wax isu beddelaan (Rate of Change). Xagga joomitiriga, waa janjeerka (slope) xariiqda taabata qallooca.",
     whyIsItImportant: "Waa wadnaha injineernimada. Haddii aan haysano function u taagan 'Moment' (leexinta), derivative-kiisu waa 'Shear Force' (Xoogga jarista). Haddii aan haysano 'Load', derivative-kiisu waa isbeddelka culeyska. Waxay noo sheegtaa meesha ugu khatarta badan dhismaha.",
@@ -79,7 +78,7 @@ const calc_derivatives = createCivilLesson('calc-3-derivatives', 'CASHAR 3: Deri
     quiz: [
         { question: "Derivative wuxuu cabbiraa:", options: ["Mugga", "Heerka isbeddelka (Rate of Change)", "Dhererka", "Wareegga"], correctAnswer: "Heerka isbeddelka (Rate of Change)", explanation: "Waa sida degdegga ah ee `y` isku beddesho marka `x` isbeddesho." }
     ]
-});
+}, 'WUvTyaaNkzM');
 const calc_optimization = createCivilLesson('calc-4-optimization', 'CASHAR 4: Codsiyada Derivative & Optimization', {
     whatIsIt: "**Optimization** waa habka loo helo xalka ugu fiican—ha noqdo midka ugu qiimaha yar, kan ugu adag, ama kan ugu fudud. Waxaan isticmaalnaa Derivatives si aan u helno meelaha ugu sarreeya (Maxima) iyo ugu hooseeya (Minima).",
     whyIsItImportant: "Injineerka wanaagsan ma dhiso kaliya wax taagan; wuxuu dhisaa wax taagan oo kharashkiisu macquul yahay (Efficient). Sidee loo sameeyaa haanta biyaha oo qaadda mugga ugu badan laakiin isticmaasha birta ugu yar? Taasi waa Optimization.",
@@ -92,7 +91,7 @@ const calc_optimization = createCivilLesson('calc-4-optimization', 'CASHAR 4: Co
     quiz: [
         { question: "Optimization macnaheedu waa:", options: ["In la helo xalka ugu fiican (Best solution)", "In la qiyaaso", "In la isticmaalo kombiyuutar", "In la badiyo kharashka"], correctAnswer: "In la helo xalka ugu fiican (Best solution)", explanation: "Waa habka lagu helo Maxima ama Minima." }
     ]
-});
+}, '7kOqZ1fA2uI');
 const calc_integration = createCivilLesson('calc-5-integration', 'CASHAR 5: Integration (Isku-geyn)', {
     whatIsIt: "**Integration** waa geeddi-socodka ka soo horjeeda Derivative-ka. Waa isku-geynta qaybo yaryar si loo helo wadarta guud. Joomitiri ahaan, waa bedka (Area) ka hooseeya qallooca garaafka.",
     whyIsItImportant: "Haddii aan haysano function-ka 'Load' (Culeyska), Integration-kiisu waa 'Shear Force'. Integration-ka Shear Force waa 'Bending Moment'. Sidoo kale, waxaan u isticmaalnaa si aan u xisaabino mugga (Volume) dhismayaasha qaabkoodu adag yahay (sida biyo-xireenada) iyo xarumaha cuf-isjiidadka (Center of Gravity/Centroids).",
@@ -105,7 +104,7 @@ const calc_integration = createCivilLesson('calc-5-integration', 'CASHAR 5: Inte
     quiz: [
         { question: "Integration waa lidka:", options: ["Derivative-ka", "Limit-ka", "Function-ka", "Algebra"], correctAnswer: "Derivative-ka", explanation: "Fundamental Theorem of Calculus ayaa isku xira labadan." }
     ]
-});
+}, 'rfscVS0vtbw');
 const phys_kinematics = createCivilLesson('phys-1-kinematics', 'CASHAR 6: Kinematics (Dhaqdhaqaaqa)', {
     whatIsIt: "**Kinematics** waa laanta makaanikada ee sharxaysa dhaqdhaqaaqa walxaha iyadoon la eegayn xoogagga sababa. Waxay ka jawaabtaa su'aalaha: Xagee buu joogaa? Intee buu socdaa? Sidee buu u dardar-gelinayaa?",
     whyIsItImportant: "Goobta dhismaha, wax walba way dhaqaaqaan. Wiishashka (Cranes), gawaarida xamuulka, iyo biyaha tuubooyinka. Fahamka Kinematics wuxuu muhiim u yahay badbaadada goobta iyo qorsheynta saadka (logistics).",
@@ -119,7 +118,7 @@ const phys_kinematics = createCivilLesson('phys-1-kinematics', 'CASHAR 6: Kinema
     quiz: [
         { question: "Kinematics waxay barataa:", options: ["Dhaqdhaqaaqa iyadoon la eegin xoogga", "Xoogagga", "Tamarta", "Walxaha"], correctAnswer: "Dhaqdhaqaaqa iyadoon la eegin xoogga", explanation: "Waa sharaxaadda dhaqdhaqaaqa (Geometry of motion)." }
     ]
-});
+}, 'x_qC8a12c8E');
 const phys_newtons_laws = createCivilLesson('phys-2-newtons-laws', 'CASHAR 7: Shuruucda Newton ee Dhaqdhaqaaqa', {
     whatIsIt: "Saddexda sharci ee Sir Isaac Newton ayaa ah aasaaska injineernimada dhismaha. Waxay qeexaan xiriirka ka dhexeeya walax, xoogagga saaran, iyo dhaqdhaqaaqeeda.",
     whyIsItImportant: "Dhismaha ma istaagi karo haddii aynaan fahmin xoogagga. Sharciga 1aad wuxuu saldhig u yahay **Statics** (Dhismaha taagan). Sharciga 2aad wuxuu muhiim u yahay **Dynamics** (Dhismaha gariiraya dhulgariirka dartii). Sharciga 3aad wuxuu sharxayaa sida dhulku u celiyo culeyska dhismaha (Reaction forces).",
@@ -133,7 +132,7 @@ const phys_newtons_laws = createCivilLesson('phys-2-newtons-laws', 'CASHAR 7: Sh
     quiz: [
         { question: "Sharciga 1aad ee Newton wuxuu aasaas u yahay:", options: ["Equilibrium (Dheellitirnaanta)", "Acceleration", "Energy", "Gravity"], correctAnswer: "Equilibrium (Dheellitirnaanta)", explanation: "Haddii xoogaggu isku dheellitiran yihiin (Sum F = 0), walaxdu ma dardargelayso." }
     ]
-});
+}, 'kKKM8Y-u7ds');
 const phys_work_energy = createCivilLesson('phys-3-work-energy', 'CASHAR 8: Work & Energy (Shaqada & Tamarta)', {
     whatIsIt: "**Work** (Shaqo) fiisigis ahaan waa marka xoog uu walax u dhaqaajiyo masaafo ($W = F \\cdot d$). **Energy** (Tamar) waa awoodda shaqo lagu qabto. Dhismaha dhexdiisa, tamartu way isku beddeshaa (Potential to Kinetic).",
     whyIsItImportant: "Injineerku wuxuu u baahan yahay inuu ogaado awoodda mashiinnada. Wiishku imisa tamar ah ayuu u baahan yahay si uu bir 5-tan ah ugu qaado dabaqa 10aad? Dubbaha dhulka qoda (Pile Driver) imisa tamar ah ayuu ku dhuftaa dhulka?",
@@ -147,7 +146,7 @@ const phys_work_energy = createCivilLesson('phys-3-work-energy', 'CASHAR 8: Work
     quiz: [
         { question: "Shaqo (Work) waxaa la qabtaa kaliya marka:", options: ["Walaxdu ay dhaqaaqdo jihada xoogga", "Xoog la saaro oo kaliya", "Walaxdu istaagto", "Waqti dhaafo"], correctAnswer: "Walaxdu ay dhaqaaqdo jihada xoogga", explanation: "Haddii aadan dhaqaajin, shaqo maadan qaban fiisigis ahaan." }
     ]
-});
+}, '2WS1sG9fhOk');
 const phys_momentum = createCivilLesson('phys-4-momentum', 'CASHAR 9: Impulse & Momentum', {
     whatIsIt: "**Momentum** waa qiyaasta ay adag tahay in la joojiyo walax dhaqaaqaysa ($p = mv$). **Impulse** waa xoogga lagu dabaqay waqti gaaban ($J = F \\Delta t$).",
     whyIsItImportant: "Injineernimada madaniga, tani waxay muhiim u tahay falanqaynta shilalka (Impact Loads). Tusaale ahaan, marka baabuur ku dhufto darbiga buundada (Bridge Barrier), ama marka biyuhu si xoog ah ugu dhuftaan biyo-xireenka (Water Hammer). Waa inaan naqshadaynaa dhismayaal u adkeysan kara dharbaaxadaas.",
@@ -160,7 +159,7 @@ const phys_momentum = createCivilLesson('phys-4-momentum', 'CASHAR 9: Impulse & 
     quiz: [
         { question: "Momentum ($p$) waxaa lagu xisaabiyaa:", options: ["Mass x Velocity", "Mass x Acceleration", "Force x Time", "Energy / Time"], correctAnswer: "Mass x Velocity", explanation: "p = mv." }
     ]
-});
+}, 'hM7P5-s3r3E');
 const phys_rotation = createCivilLesson('phys-5-rotation', 'CASHAR 10: Rotational Motion & Torque', {
     whatIsIt: "**Torque** (Wareeg-xoog) waa xoogga keena wareegga ($τ = r \\times F$). Waa muhiim in la kala saaro dhaqdhaqaaqa toosan (Linear) iyo kan wareega (Rotational).",
     whyIsItImportant: "Dhismayaasha intooda badan ma wareegaan, laakiin xoogagga isku daya inay wareejiyaan (Moments) ayaa ah kuwa ugu khatarta badan. Wiishka (Crane) ma gaddoomayo? Boolka (Bolt) ma si fiican baa loo adkeeyay? Albaabka biyo-xireenku ma furmayaa? Dhammaan waa Torque.",
@@ -173,7 +172,7 @@ const phys_rotation = createCivilLesson('phys-5-rotation', 'CASHAR 10: Rotationa
     quiz: [
         { question: "Torque (Moment) waa:", options: ["Xoog keena wareeg (Force causing rotation)", "Xoog toosan", "Xawaare", "Cuf"], correctAnswer: "Xoog keena wareeg (Force causing rotation)", explanation: "T = F x d." }
     ]
-});
+}, 'b-FAsozWEnt');
 const phys_equilibrium = createCivilLesson('phys-6-equilibrium', 'CASHAR 11: Static Equilibrium (Dheellitirnaanta Taagan)', {
     whatIsIt: "**Static Equilibrium** waa xaaladda ugu muhiimsan injineernimada madaniga. Waa marka dhismaha uu taagan yahay oo uusan dhaqaaqin (`Sum of Forces = 0`) uusan wareegin (`Sum of Moments = 0`).",
     whyIsItImportant: "Buundo kasta, guri kasta, iyo biyo-xireen kasta oo aad aragto wuxuu ku taagan yahay Equilibrium. Haddii shuruudahan la buuxin waayo, dhismaha wuu dumayaa. Barashada Statics waa tallaabada ugu horreysa ee lagu noqdo Injineer Dhisme.",
@@ -186,7 +185,7 @@ const phys_equilibrium = createCivilLesson('phys-6-equilibrium', 'CASHAR 11: Sta
     quiz: [
         { question: "Static Equilibrium macnaheedu waa:", options: ["Dhismaha ma dhaqaaqayo mana wareegayo", "Dhismaha wuu dhaqaaqayaa", "Dhismaha wuu wareegayaa", "Dhismaha wuu gariirayaa"], correctAnswer: "Dhismaha ma dhaqaaqayo mana wareegayo", explanation: "Acceleration = 0 xaalad walba." }
     ]
-});
+}, 'jH-3q9a6X6A');
 
 export const civilEngineeringDiscipline: Discipline = {
     id: 'civil-engineering',

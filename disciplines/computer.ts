@@ -2,11 +2,12 @@
 import type { Discipline, Lesson } from '../types';
 import { ChipIcon } from '../components/Icons';
 
-const createCompLesson = (id: string, title: string, content: any): Lesson => ({
+const createCompLesson = (id: string, title: string, content: any, videoId?: string): Lesson => ({
     id: `comp-${id}`,
     title,
     duration: "45 mins",
     imageUrl: `https://picsum.photos/800/400?random=comp-${id}`,
+    videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined,
     structuredContent: {
         whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud.' },
         whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
@@ -35,17 +36,17 @@ export const computerEngineeringDiscipline: Discipline = {
               id: 'comp-y1-prog', 
               title: 'Programming Fundamentals (Python)', 
               lessons: [
-                  createCompLesson('py-intro', 'Hordhaca Python', { whatIsIt: "Luqad barnaamijineed oo aad loo isticmaalo.", whyIsItImportant: "Waa luqad fudud oo awood badan.", examples: "Data Science, Web Development." }),
-                  createCompLesson('py-control', 'Control Structures', { whatIsIt: "Loops iyo If statements.", whyIsItImportant: "Waxay maamulaan socodka barnaamijka." }),
-                  createCompLesson('py-functions', 'Functions & Modules', { whatIsIt: "Qaybo koodh ah oo dib loo isticmaali karo." })
+                  createCompLesson('py-intro', 'Hordhaca Python', { whatIsIt: "Luqad barnaamijineed oo aad loo isticmaalo.", whyIsItImportant: "Waa luqad fudud oo awood badan.", examples: "Data Science, Web Development." }, 'rfscVS0vtbw'),
+                  createCompLesson('py-control', 'Control Structures', { whatIsIt: "Loops iyo If statements.", whyIsItImportant: "Waxay maamulaan socodka barnaamijka." }, 'PqFKRqpHrjw'),
+                  createCompLesson('py-functions', 'Functions & Modules', { whatIsIt: "Qaybo koodh ah oo dib loo isticmaali karo." }, 'NSbOtYzIQI0')
               ] 
           },
           { 
               id: 'comp-y1-math', 
               title: 'Discrete Mathematics', 
               lessons: [
-                  createCompLesson('math-logic', 'Propositional Logic', { whatIsIt: "Mantiqa xisaabeed.", whyIsItImportant: "Aasaaska wareegyada dijitaalka ah." }),
-                  createCompLesson('math-sets', 'Set Theory', { whatIsIt: "Barashada ururinta walxaha." })
+                  createCompLesson('math-logic', 'Propositional Logic', { whatIsIt: "Mantiqa xisaabeed.", whyIsItImportant: "Aasaaska wareegyada dijitaalka ah." }, 'h8E-uE6d-k4'),
+                  createCompLesson('math-sets', 'Set Theory', { whatIsIt: "Barashada ururinta walxaha." }, 'tyDKR4FG3Yw')
               ] 
           },
         ]
@@ -59,16 +60,16 @@ export const computerEngineeringDiscipline: Discipline = {
               id: 'comp-y2-arch', 
               title: 'Computer Architecture', 
               lessons: [
-                  createCompLesson('arch-von-neumann', 'Von Neumann Architecture', { whatIsIt: "Qaabka kombiyuutarka casriga ah uu u dhisan yahay.", whyIsItImportant: "Waa aasaaska dhammaan CPU-yada." }),
-                  createCompLesson('arch-cpu', 'CPU Design', { whatIsIt: "Sida loo naqshadeeyo processor-ka." })
+                  createCompLesson('arch-von-neumann', 'Von Neumann Architecture', { whatIsIt: "Qaabka kombiyuutarka casriga ah uu u dhisan yahay.", whyIsItImportant: "Waa aasaaska dhammaan CPU-yada." }, '4rXfjLSrQDI'),
+                  createCompLesson('arch-cpu', 'CPU Design', { whatIsIt: "Sida loo naqshadeeyo processor-ka." }, 'cNN_tTXABUA')
               ] 
           },
           { 
               id: 'comp-y2-dsa', 
               title: 'Data Structures & Algorithms', 
               lessons: [
-                  createCompLesson('dsa-arrays', 'Arrays & Linked Lists', { whatIsIt: "Hababka aasaasiga ah ee kaydinta xogta." }),
-                  createCompLesson('dsa-trees', 'Trees & Graphs', { whatIsIt: "Qaababka xogta ee isku xiran." })
+                  createCompLesson('dsa-arrays', 'Arrays & Linked Lists', { whatIsIt: "Hababka aasaasiga ah ee kaydinta xogta." }, 'RBSGKlAvoiM'),
+                  createCompLesson('dsa-trees', 'Trees & Graphs', { whatIsIt: "Qaababka xogta ee isku xiran." }, 'oSWTXtMglKE')
               ] 
           },
         ]
@@ -82,16 +83,16 @@ export const computerEngineeringDiscipline: Discipline = {
               id: 'comp-y3-os', 
               title: 'Operating Systems', 
               lessons: [
-                  createCompLesson('os-intro', 'Hordhaca OS', { whatIsIt: "Software-ka maamula hardware-ka." }),
-                  createCompLesson('os-process', 'Process Management', { whatIsIt: "Sida barnaamijyadu u wada shaqeeyaan." })
+                  createCompLesson('os-intro', 'Hordhaca OS', { whatIsIt: "Software-ka maamula hardware-ka." }, 'vBURTt97EkA'),
+                  createCompLesson('os-process', 'Process Management', { whatIsIt: "Sida barnaamijyadu u wada shaqeeyaan." }, 'OrM7nZCxWZk')
               ] 
           },
           { 
               id: 'comp-y3-net', 
               title: 'Computer Networks', 
               lessons: [
-                  createCompLesson('net-osi', 'OSI Model', { whatIsIt: "Toddobada lakab ee isgaarsiinta." }),
-                  createCompLesson('net-tcpip', 'TCP/IP Protocol', { whatIsIt: "Luqadda Internet-ka." })
+                  createCompLesson('net-osi', 'OSI Model', { whatIsIt: "Toddobada lakab ee isgaarsiinta." }, 'IPVgpEiQZhY'),
+                  createCompLesson('net-tcpip', 'TCP/IP Protocol', { whatIsIt: "Luqadda Internet-ka." }, 'PpsEaqJV_A0')
               ] 
           },
         ]
@@ -105,16 +106,16 @@ export const computerEngineeringDiscipline: Discipline = {
               id: 'comp-y4-ai', 
               title: 'Artificial Intelligence', 
               lessons: [
-                  createCompLesson('ai-ml', 'Machine Learning Basics', { whatIsIt: "Barashada sida kombiyuutarku wax u barto." }),
-                  createCompLesson('ai-nn', 'Neural Networks', { whatIsIt: "Qaabka maskaxda dadka oo lagu dayday." })
+                  createCompLesson('ai-ml', 'Machine Learning Basics', { whatIsIt: "Barashada sida kombiyuutarku wax u barto." }, 'Gv9_4yMHFhI'),
+                  createCompLesson('ai-nn', 'Neural Networks', { whatIsIt: "Qaabka maskaxda dadka oo lagu dayday." }, 'aircAruvnKk')
               ] 
           },
           { 
               id: 'comp-y4-security', 
               title: 'Cybersecurity', 
               lessons: [
-                  createCompLesson('sec-crypto', 'Cryptography', { whatIsIt: "Qarinta xogta." }),
-                  createCompLesson('sec-network', 'Network Security', { whatIsIt: "Ilaalinta shabakadaha." })
+                  createCompLesson('sec-crypto', 'Cryptography', { whatIsIt: "Qarinta xogta." }, 'JH4qNrLx8FE'),
+                  createCompLesson('sec-network', 'Network Security', { whatIsIt: "Ilaalinta shabakadaha." }, 'DNsR92q-G6Q')
               ] 
           },
         ]

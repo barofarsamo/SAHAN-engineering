@@ -1,15 +1,23 @@
 
 import React from 'react';
 import type { Discipline } from '../types';
-import { CheckCircleIcon, GearIcon } from './Icons';
+import { CheckCircleIcon, GearIcon, BellIcon } from './Icons';
 
 interface LearnTabProps {
   disciplines: Discipline[];
   getProgressForDiscipline: (disciplineId: string) => { completed: number; total: number };
   onSelectDiscipline: (discipline: Discipline) => void;
+  onOpenNotifications: () => void;
+  unreadNotifications: number;
 }
 
-const LearnTab: React.FC<LearnTabProps> = ({ disciplines, getProgressForDiscipline, onSelectDiscipline }) => {
+const LearnTab: React.FC<LearnTabProps> = ({ 
+    disciplines, 
+    getProgressForDiscipline, 
+    onSelectDiscipline,
+    onOpenNotifications,
+    unreadNotifications 
+}) => {
   // Filter for disciplines with progress > 0
   const activeDisciplines = disciplines.filter(d => {
     const p = getProgressForDiscipline(d.id);
@@ -21,7 +29,22 @@ const LearnTab: React.FC<LearnTabProps> = ({ disciplines, getProgressForDiscipli
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-xl font-semibold text-white">My Learning</h1>
-            <GearIcon className="h-6 w-6 text-white" />
+            <div className="flex gap-2">
+                 <button 
+                    onClick={onOpenNotifications}
+                    className="relative p-2 bg-base-100 rounded-full text-white hover:bg-base-300 transition-colors"
+                >
+                    <BellIcon className="h-6 w-6" />
+                    {unreadNotifications > 0 && (
+                        <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center font-bold">
+                            {unreadNotifications}
+                        </span>
+                    )}
+                </button>
+                <button className="p-2 bg-base-100 rounded-full text-white hover:bg-base-300 transition-colors">
+                     <GearIcon className="h-6 w-6" />
+                </button>
+            </div>
         </div>
 
         {/* Goals Card */}

@@ -2,11 +2,12 @@
 import type { Discipline, Lesson } from '../types';
 import { RocketIcon } from '../components/Icons';
 
-const createAeroLesson = (id: string, title: string, content: any): Lesson => ({
+const createAeroLesson = (id: string, title: string, content: any, videoId?: string): Lesson => ({
     id: `aero-${id}`,
     title,
     duration: "45 mins",
     imageUrl: `https://picsum.photos/800/400?random=aero-${id}`,
+    videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined,
     structuredContent: {
         whatIsIt: { title: 'Waa Maxay?', content: content.whatIsIt || 'Qeexitaan guud.' },
         whyIsItImportant: { title: 'Maxay Muhiim u Tahay?', content: content.whyIsItImportant || 'Sharaxaad ku saabsan muhiimadda.' },
@@ -35,8 +36,8 @@ export const aerospaceEngineeringDiscipline: Discipline = {
               id: 'aero-y1-intro', 
               title: 'Introduction to Flight', 
               lessons: [
-                  createAeroLesson('atmosphere', 'Standard Atmosphere', { whatIsIt: "Qaabka cadaadiska iyo heerkulka hawada.", whyIsItImportant: "Muhiim u ah xisaabinta waxqabadka diyaaradda." }),
-                  createAeroLesson('forces', 'Four Forces of Flight', { whatIsIt: "Lift, Weight, Thrust, Drag.", howItWorks: "Dheellitirka afartan xoog." })
+                  createAeroLesson('atmosphere', 'Standard Atmosphere', { whatIsIt: "Qaabka cadaadiska iyo heerkulka hawada.", whyIsItImportant: "Muhiim u ah xisaabinta waxqabadka diyaaradda." }, '5ltjznN1sK4'),
+                  createAeroLesson('forces', 'Four Forces of Flight', { whatIsIt: "Lift, Weight, Thrust, Drag.", howItWorks: "Dheellitirka afartan xoog." }, 'Gg0TXNX9SwA')
               ] 
           },
         ]
@@ -50,15 +51,15 @@ export const aerospaceEngineeringDiscipline: Discipline = {
               id: 'aero-y2-aero', 
               title: 'Aerodynamics I', 
               lessons: [
-                  createAeroLesson('airfoils', 'Airfoil Theory', { whatIsIt: "Qaabka baalka diyaaradda.", howItWorks: "Abuurista Lift-ka." }),
-                  createAeroLesson('incompressible', 'Incompressible Flow', { whatIsIt: "Dhaqdhaqaaqa hawada xawaaraha hooseeya." })
+                  createAeroLesson('airfoils', 'Airfoil Theory', { whatIsIt: "Qaabka baalka diyaaradda.", howItWorks: "Abuurista Lift-ka." }, 'QKQK6_9h0pI'),
+                  createAeroLesson('incompressible', 'Incompressible Flow', { whatIsIt: "Dhaqdhaqaaqa hawada xawaaraha hooseeya." }, '6Z7Uk5y9g8w')
               ] 
           },
           { 
               id: 'aero-y2-struct', 
               title: 'Aerospace Structures', 
               lessons: [
-                  createAeroLesson('thin-walled', 'Thin-Walled Structures', { whatIsIt: "Qaab-dhismeedka diyaaradaha fudud oo adag." })
+                  createAeroLesson('thin-walled', 'Thin-Walled Structures', { whatIsIt: "Qaab-dhismeedka diyaaradaha fudud oo adag." }, 'b1c2d3e4f5g')
               ] 
           },
         ]
@@ -72,15 +73,15 @@ export const aerospaceEngineeringDiscipline: Discipline = {
               id: 'aero-y3-prop', 
               title: 'Propulsion Systems', 
               lessons: [
-                  createAeroLesson('jets', 'Jet Engines (Turbojet/Turbofan)', { whatIsIt: "Matoorada gaaska." }),
-                  createAeroLesson('rockets', 'Rocket Propulsion', { whatIsIt: "Matoorada gantaalaha." })
+                  createAeroLesson('jets', 'Jet Engines (Turbojet/Turbofan)', { whatIsIt: "Matoorada gaaska." }, 'Kqiq4e6-R8E'),
+                  createAeroLesson('rockets', 'Rocket Propulsion', { whatIsIt: "Matoorada gantaalaha." }, 'L0AMQ6k77cE')
               ] 
           },
           { 
               id: 'aero-y3-stability', 
               title: 'Flight Dynamics', 
               lessons: [
-                  createAeroLesson('stability', 'Static & Dynamic Stability', { whatIsIt: "Awoodda diyaaraddu isku dheellitirto." })
+                  createAeroLesson('stability', 'Static & Dynamic Stability', { whatIsIt: "Awoodda diyaaraddu isku dheellitirto." }, 'x_qC8a12c8E')
               ] 
           },
         ]
@@ -94,8 +95,8 @@ export const aerospaceEngineeringDiscipline: Discipline = {
               id: 'aero-y4-space', 
               title: 'Orbital Mechanics', 
               lessons: [
-                  createAeroLesson('kepler', 'Kepler\'s Laws', { whatIsIt: "Dhaqdhaqaaqa meerayaasha." }),
-                  createAeroLesson('maneuvers', 'Orbital Maneuvers', { whatIsIt: "Beddelka wadada dayax-gacmeedka (Hohmann Transfer)." })
+                  createAeroLesson('kepler', 'Kepler\'s Laws', { whatIsIt: "Dhaqdhaqaaqa meerayaasha." }, '5a6b7c8d9e0'),
+                  createAeroLesson('maneuvers', 'Orbital Maneuvers', { whatIsIt: "Beddelka wadada dayax-gacmeedka (Hohmann Transfer)." }, 'f1g2h3i4j5k')
               ] 
           },
           { 

@@ -13,10 +13,12 @@ import ChapterBrowser from './components/ChapterBrowser';
 import LessonBrowser from './components/LessonBrowser';
 import Certificate from './components/Certificate';
 import Header from './components/Header';
+import NotificationCenter from './components/NotificationCenter';
 import { disciplines } from './constants';
 import type { Discipline, Lesson, SearchResult, Level, Module } from './types';
 import { useProgress } from './hooks/useProgress';
 import { useDownloads } from './hooks/useDownloads';
+import { useNotifications } from './hooks/useNotifications';
 import { SpinnerIcon, ArrowRightIcon, XIcon, AcademicCapIcon, BookOpenIcon, BuildingIcon } from './components/Icons';
 import { useMediaQuery } from './hooks/useMediaQuery';
 
@@ -49,6 +51,9 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
+  // Notifications State
+  const [isNotificationsOpen, setNotificationsOpen] = useState(false);
+
   // Course Data State
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<Level | null>(null);
@@ -79,6 +84,14 @@ const App: React.FC = () => {
     getDownloadedDiscipline
   } = useDownloads();
 
+  const {
+      notifications,
+      unreadCount,
+      markAsRead,
+      markAllAsRead,
+      clearNotifications
+  } = useNotifications();
+
   // --- Theme Effect ---
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -106,16 +119,9 @@ const App: React.FC = () => {
     setSelectedChapter(null);
     setSelectedModule(null);
     setIsCourseActive(true);
-
-    if (discipline.id === 'civil-engineering') {
-        setCourseViewMode('CHAPTER_BROWSE');
-    } else {
-        const firstLesson = offlineDiscipline.levels[0].modules[0].lessons[0];
-        setSelectedLesson(firstLesson);
-        setLastViewed(offlineDiscipline.id, firstLesson.id);
-        setCourseViewMode('LEARN');
-        if (!isMobile) setSidebarOpen(true);
-    }
+    
+    // Always start with Chapter Browser for 'Real Course' experience
+    setCourseViewMode('CHAPTER_BROWSE');
   };
 
   const handleSelectChapter = (chapter: Level) => {
@@ -166,9 +172,12 @@ const App: React.FC = () => {
           setCourseViewMode('LEARN');
           setIsCourseActive(true);
       } else {
-          // Simple navigation for others
-          handleSelectDiscipline(result.discipline);
-          // TODO: Improve simple discipline navigation to specific lesson
+           // For consistency, try to set up learn mode if possible
+          setSelectedChapter(result.level);
+          setSelectedModule(result.module);
+          setSelectedLesson(result.lesson);
+          setCourseViewMode('LEARN');
+          setIsCourseActive(true);
       }
   };
 
@@ -350,6 +359,8 @@ const App: React.FC = () => {
                     getDownloadStatus={getDownloadStatus}
                     onAddDownload={addDownload}
                     onRemoveDownload={removeDownload}
+                    onOpenNotifications={() => setNotificationsOpen(true)}
+                    unreadNotifications={unreadCount}
                 />
             )}
             
@@ -358,6 +369,8 @@ const App: React.FC = () => {
                     disciplines={disciplines}
                     getProgressForDiscipline={getProgressForDiscipline}
                     onSelectDiscipline={handleSelectDiscipline}
+                    onOpenNotifications={() => setNotificationsOpen(true)}
+                    unreadNotifications={unreadCount}
                 />
             )}
 
@@ -393,6 +406,15 @@ const App: React.FC = () => {
                 onResetProgress={handleResetProgress}
             />
         )}
+
+        <NotificationCenter 
+            notifications={notifications}
+            isOpen={isNotificationsOpen}
+            onClose={() => setNotificationsOpen(false)}
+            onMarkRead={markAsRead}
+            onClearAll={clearNotifications}
+            onMarkAllRead={markAllAsRead}
+        />
     </div>
   );
 };

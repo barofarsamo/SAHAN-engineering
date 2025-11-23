@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { Discipline, SearchResult, DownloadStatus } from '../types';
-import { DownloadIcon, CheckCircleIcon, RocketIcon, GearIcon, ZapIcon, ChipIcon, BuildingIcon } from './Icons';
+import { DownloadIcon, CheckCircleIcon, RocketIcon, GearIcon, ZapIcon, ChipIcon, BuildingIcon, BriefcaseIcon, BellIcon } from './Icons';
 
 interface ExploreTabProps {
   disciplines: Discipline[];
@@ -9,6 +9,8 @@ interface ExploreTabProps {
   getDownloadStatus: (disciplineId: string) => DownloadStatus;
   onAddDownload: (discipline: Discipline) => void;
   onRemoveDownload: (disciplineId: string) => void;
+  onOpenNotifications: () => void;
+  unreadNotifications: number;
 }
 
 // Helper for category chips
@@ -20,19 +22,32 @@ const topics = [
   { id: 'health', name: 'Health', icon: ZapIcon },
 ];
 
-import { BriefcaseIcon } from './Icons';
-
 const ExploreTab: React.FC<ExploreTabProps> = ({
   disciplines,
   onSelectDiscipline,
   getDownloadStatus,
   onAddDownload,
   onRemoveDownload,
+  onOpenNotifications,
+  unreadNotifications
 }) => {
   return (
     <div className="flex-1 overflow-y-auto bg-base-200 pb-20">
       <div className="p-4 md:p-6">
-        <h1 className="text-3xl font-bold text-white mb-6">Explore</h1>
+        <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold text-white">Explore</h1>
+            <button 
+                onClick={onOpenNotifications}
+                className="relative p-2 bg-base-100 rounded-full text-white hover:bg-base-300 transition-colors"
+            >
+                <BellIcon className="h-6 w-6" />
+                {unreadNotifications > 0 && (
+                    <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center font-bold">
+                        {unreadNotifications}
+                    </span>
+                )}
+            </button>
+        </div>
 
         {/* Topics Section */}
         <div className="mb-8">

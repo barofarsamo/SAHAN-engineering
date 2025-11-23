@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { Lesson, Module } from '../types';
 import { 
     CheckCircleIcon,
@@ -89,6 +89,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
     onCompleteModule,
     onTermClick
 }) => {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
     
   const parseTextWithTerms = (text?: string) => {
       if (!text) return null;
@@ -155,17 +156,36 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                         <h2 className="text-2xl md:text-3xl font-bold text-white mt-2">{lesson.title}</h2>
                     </div>
 
-                    {/* Video Placeholder */}
-                    <div className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-lg border border-base-300 mb-8 group cursor-pointer">
-                        <img src={lesson.imageUrl} alt={lesson.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="h-16 w-16 bg-brand-secondary rounded-full flex items-center justify-center pl-1 shadow-2xl transform group-hover:scale-110 transition-transform">
-                                <PlayIcon className="h-8 w-8 text-white" />
-                            </div>
-                        </div>
-                        <div className="absolute bottom-4 left-4">
-                             <p className="text-white font-bold text-sm bg-black/50 px-2 py-1 rounded">Watch Lecture</p>
-                        </div>
+                    {/* Video Player */}
+                    <div 
+                        className="relative aspect-video bg-black rounded-xl overflow-hidden shadow-lg border border-base-300 mb-8 group cursor-pointer"
+                        onClick={() => {
+                            if (lesson.videoUrl) setActiveVideo(lesson.id);
+                        }}
+                    >
+                        {activeVideo === lesson.id && lesson.videoUrl ? (
+                            <iframe 
+                                src={lesson.videoUrl} 
+                                title={lesson.title}
+                                className="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowFullScreen
+                            />
+                        ) : (
+                            <>
+                                <img src={lesson.imageUrl} alt={lesson.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity" />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="h-16 w-16 bg-brand-secondary rounded-full flex items-center justify-center pl-1 shadow-2xl transform group-hover:scale-110 transition-transform">
+                                        <PlayIcon className="h-8 w-8 text-white" />
+                                    </div>
+                                </div>
+                                <div className="absolute bottom-4 left-4">
+                                    <p className="text-white font-bold text-sm bg-black/50 px-2 py-1 rounded">
+                                        {lesson.videoUrl ? 'Watch Video Lecture' : 'Start Reading'}
+                                    </p>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     <div className="bg-brand-secondary/10 border-l-4 border-brand-secondary rounded-r-lg p-6 mb-10">
