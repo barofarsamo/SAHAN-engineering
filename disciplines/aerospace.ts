@@ -37,53 +37,18 @@ export const aerospaceEngineeringDiscipline: Discipline = {
               title: 'Introduction to Flight', 
               lessons: [
                   createAeroLesson('atmosphere', 'Standard Atmosphere Model', { 
-                      whatIsIt: `Si diyaarad loo naqshadeeyo, waa inaan marka hore fahamnaa badweynta aan ku dhex dabaalanayno: **Hawada (The Atmosphere)**.
-Hawadu ma aha mid joogto ah. Cadaadiska ($P$), Heerkulka ($T$), iyo Cufnaanta ($\rho$) way isbeddelaan markii kor loo kaco.
-
-**ISA (International Standard Atmosphere):**
-Injineeradu waxay sameeyeen "Standard Model" si qof walba xisaabtiisu isku mid u noqoto.
-*   Heerkulka badda: 15°C.
-*   Cadaadiska badda: 101.325 kPa.
-*   Heerka hoos u dhaca heerkulka (Lapse Rate): -6.5°C halkii kiiloomitir ee Troposphere-ka dhexdiisa.
-
-Tani aad bay muhiim u tahay sababtoo ah matoorka diyaaradda iyo baalasheedu waxay ku xiran yihiin cufnaanta hawada. Hawada khafiifka ah (High Altitude), matoorku wuxuu helayaa ogsijiin yar, baalkuna wuxuu helayaa 'Lift' yar.`,
-                      
-                      howItWorks: `**Hydrostatic Equation:**
-Waxay sharxaysaa isbeddelka cadaadiska:
-$$dP = -\rho g dh$$
-(Isbeddelka cadaadiska = Cufnaanta x Cuf-isjiidad x Isbeddelka dhererka).
-
-Marka aan kor u kacno, culeyska hawada naga sarreysa ayaa yaraada, markaas cadaadiskuna wuu yaraadaa. Injineerada Aerospace-ku waa inay naqshadeeyaan qolka diyaaradda (Cabin Pressurization) si dadku u neefsan karaan marka la joogo 30,000 feet, halkaas oo cadaadisku aad u hooseeyo.`,
-
-                      whyIsItImportant: `Fahamka Atmosphere-ka ayaa go'aamiya:
-1.  **Dhererka Duulimaadka (Ceiling):** Ilaa intee ayay diyaaraddu kori kartaa?
-2.  **Xawaaraha:** Hawada khafiifka ah waxay ogolaataa xawaare sare (Drag yar), laakiin waxay u baahan tahay matoor awood badan.
-3.  **Aerodynamic Heating:** Marka xawaaraha aad u kordho (Supersonic), jajabinta hawadu waxay dhalisaa kulayl daran oo dhalaalin kara birta diyaaradda.`
+                      whatIsIt: `Si diyaarad loo naqshadeeyo, waa inaan marka hore fahamnaa badweynta aan ku dhex dabaalanayno: **Hawada (The Atmosphere)**.`,
+                      howItWorks: `**Hydrostatic Equation:** $$dP = -\rho g dh$$`,
+                      whyIsItImportant: `Fahamka Atmosphere-ka ayaa go'aamiya Dhererka Duulimaadka iyo Xawaaraha.`
                   }, '5ltjznN1sK4'),
                   createAeroLesson('forces', 'Four Forces of Flight', { 
-                      whatIsIt: `Diyaarad kasta oo duulaysa waxay ku jirtaa dagaal u dhexeeya afar xoog oo waaweyn:
-1.  **Lift (Kor-u-qaadis):** Xoogga ka yimaada baalasheeda oo la dagaalama cuf-isjiidadka. Wuxuu u shaqeeyaa kor.
-2.  **Weight (Culeys):** Xoogga cuf-isjiidadka dhulka oo hoos u jiidaya diyaaradda ($W=mg$).
-3.  **Thrust (Riixid):** Xoogga ka yimaada matoorka oo diyaaradda horay u riixaya.
-4.  **Drag (Iska-caabin):** Xoogga hawada oo diyaaradda dib u celinaya (Air Resistance).
-
-Si diyaaraddu u duusho si siman (Steady Level Flight):
-$$Lift = Weight$$
-$$Thrust = Drag$$`,
-                      
-                      howItWorks: `**Sidee Lift loo sameeyaa?**
-Waxaa jira laba aragtiyood oo wada shaqeeya:
-*   **Bernoulli's Principle:** Hawada dusha sare ee baalka maraysa way dheeraysaa (cadaadis hoose), tan hoos maraysana way gaabisaa (cadaadis sare). Farqiga cadaadiska ayaa diyaaradda kor u qaada.
-*   **Newton's 3rd Law:** Baalku wuxuu hawada u leexiyaa hoos (Action). Hawadu waxay baalka u riixdaa kor (Reaction).
-
-**Angle of Attack ($\alpha$):**
-Waa xagasha u dhaxaysa baalka iyo hawada ku soo socota. Haddii $\alpha$ la kordhiyo, Lift wuu kordhayaa ilaa heer go'an (Stall point). Haddii laga badiyo, hawadu way ka go'aysaa baalka, diyaaradduna way soo dhacaysaa (Stall).`
+                      whatIsIt: `Diyaarad kasta oo duulaysa waxay ku jirtaa dagaal u dhexeeya afar xoog: Lift, Weight, Thrust, Drag.`,
+                      howItWorks: `**Bernoulli's Principle:** Hawada dusha sare ee baalka maraysa way dheeraysaa.`
                   }, 'Gg0TXNX9SwA')
               ] 
           },
         ]
       },
-      // ... (Rest of Aerospace structure)
       {
         id: 'aero-year-2',
         name: 'SANADKA 2AAD: Aerodynamics',
@@ -93,7 +58,7 @@ Waa xagasha u dhaxaysa baalka iyo hawada ku soo socota. Haddii $\alpha$ la kordh
               id: 'aero-y2-aero', 
               title: 'Aerodynamics I', 
               lessons: [
-                  createAeroLesson('airfoils', 'Airfoil Theory', { whatIsIt: "Qaabka baalka diyaaradda.", howItWorks: "Abuurista Lift-ka." }, 'QKQK6_9h0pI'),
+                  createAeroLesson('airfoils', 'Airfoil Theory', { whatIsIt: "Qaabka baalka diyaaradda." }, 'QKQK6_9h0pI'),
                   createAeroLesson('incompressible', 'Incompressible Flow', { whatIsIt: "Dhaqdhaqaaqa hawada xawaaraha hooseeya." }, '6Z7Uk5y9g8w')
               ] 
           },
@@ -115,7 +80,7 @@ Waa xagasha u dhaxaysa baalka iyo hawada ku soo socota. Haddii $\alpha$ la kordh
               id: 'aero-y3-prop', 
               title: 'Propulsion Systems', 
               lessons: [
-                  createAeroLesson('jets', 'Jet Engines (Turbojet/Turbofan)', { whatIsIt: "Matoorada gaaska." }, 'Kqiq4e6-R8E'),
+                  createAeroLesson('jets', 'Jet Engines', { whatIsIt: "Matoorada gaaska (Turbojet/Turbofan)." }, 'Kqiq4e6-R8E'),
                   createAeroLesson('rockets', 'Rocket Propulsion', { whatIsIt: "Matoorada gantaalaha." }, 'L0AMQ6k77cE')
               ] 
           },
@@ -138,7 +103,7 @@ Waa xagasha u dhaxaysa baalka iyo hawada ku soo socota. Haddii $\alpha$ la kordh
               title: 'Orbital Mechanics', 
               lessons: [
                   createAeroLesson('kepler', 'Kepler\'s Laws', { whatIsIt: "Dhaqdhaqaaqa meerayaasha." }, '5a6b7c8d9e0'),
-                  createAeroLesson('maneuvers', 'Orbital Maneuvers', { whatIsIt: "Beddelka wadada dayax-gacmeedka (Hohmann Transfer)." }, 'f1g2h3i4j5k')
+                  createAeroLesson('maneuvers', 'Orbital Maneuvers', { whatIsIt: "Beddelka wadada dayax-gacmeedka." }, 'f1g2h3i4j5k')
               ] 
           },
           { 
