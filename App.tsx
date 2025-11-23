@@ -244,15 +244,32 @@ const App: React.FC = () => {
   if (isCourseActive && selectedDiscipline) {
       return (
         <div className="flex flex-col h-screen font-sans bg-base-200 text-base-content overflow-hidden">
-            <Header 
-                onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
-                onToggleTutor={() => setTutorOpen(!isTutorOpen)}
-                disciplines={disciplines}
-                onSelectDiscipline={handleSelectDiscipline}
-                onGoHome={handleExitCourse}
-                isCourseView={true}
-                courseTitle={selectedDiscipline.name}
-            />
+            {/* Header hidden when reading to allow full focus, or keep if sidebar needed */}
+            {courseViewMode !== 'LEARN' && (
+                <Header 
+                    onToggleSidebar={() => setSidebarOpen(!isSidebarOpen)} 
+                    onToggleTutor={() => setTutorOpen(!isTutorOpen)}
+                    disciplines={disciplines}
+                    onSelectDiscipline={handleSelectDiscipline}
+                    onGoHome={handleExitCourse}
+                    isCourseView={true}
+                    courseTitle={selectedDiscipline.name}
+                />
+            )}
+            {/* Minimal Header for Learn Mode to maximize reading space */}
+            {courseViewMode === 'LEARN' && (
+                 <header className="bg-base-100 text-base-content border-b border-base-300 flex items-center justify-between p-2 h-12">
+                     <button onClick={handleGoToNextModule} className="p-1 rounded-full hover:bg-base-200">
+                         <XIcon className="h-5 w-5" />
+                     </button>
+                     <h1 className="text-xs font-bold uppercase tracking-widest text-brand-gray">{selectedDiscipline.name}</h1>
+                     <div className="flex">
+                         <button onClick={() => setTutorOpen(!isTutorOpen)} className="p-1 text-brand-secondary">
+                             <AcademicCapIcon className="h-6 w-6" />
+                         </button>
+                     </div>
+                 </header>
+            )}
             
             <div className="flex flex-1 overflow-hidden relative">
                  {/* Main Content Area based on sub-view mode */}
@@ -266,18 +283,7 @@ const App: React.FC = () => {
 
                  {courseViewMode === 'LEARN' && (
                     <>
-                        <Sidebar 
-                            levels={disciplineForView?.levels || []}
-                            selectedLesson={selectedLesson}
-                            onSelectLesson={handleSelectLesson}
-                            isOpen={isSidebarOpen}
-                            completedLessons={completedLessons}
-                            isMobile={isMobile}
-                            onClose={() => setSidebarOpen(false)}
-                            unlockedLevels={unlockedLevels}
-                            disciplineId={selectedDiscipline.id}
-                        />
-                         <main className="flex-1 overflow-y-auto bg-base-100">
+                         <main className="flex-1 overflow-hidden bg-base-100 relative">
                              {selectedModule ? (
                                 <LessonReader 
                                     key={selectedModule.id}
