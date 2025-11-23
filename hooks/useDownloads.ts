@@ -1,8 +1,9 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import type { Discipline, DownloadStatus } from '../types';
 
-const DOWNLOADED_IDS_KEY = 'sahan_downloaded_ids';
-const DISCIPLINE_DATA_PREFIX = 'sahan_discipline_data_';
+const DOWNLOADED_IDS_KEY = 'sahan_downloaded_ids_v2'; // Changed key to force reset
+const DISCIPLINE_DATA_PREFIX = 'sahan_discipline_data_v2_'; // Changed key to force reset
 
 export const useDownloads = () => {
   const [downloadedIds, setDownloadedIds] = useState<Set<string>>(new Set());
@@ -17,6 +18,8 @@ export const useDownloads = () => {
       }
     } catch (error) {
       console.error("Failed to load downloaded IDs from localStorage", error);
+      // If error, clear storage to prevent crashes
+      localStorage.removeItem(DOWNLOADED_IDS_KEY);
     } finally {
       setIsLoaded(true);
     }
@@ -81,11 +84,17 @@ export const useDownloads = () => {
     try {
         const disciplineJSON = localStorage.getItem(`${DISCIPLINE_DATA_PREFIX}${disciplineId}`);
         if(disciplineJSON) {
-            return JSON.parse(disciplineJSON) as Discipline;
+            const parsed = JSON.parse(disciplineJSON) as Discipline;
+            // Simple validation check to ensure data isn't corrupt
+            if (!parsed.levels || !Array.isArray(parsed.levels)) {
+                throw new Error("Invalid data structure");
+            }
+            return parsed;
         }
         return null;
     } catch (error) {
-        console.error("Failed to retrieve downloaded discipline", error);
+        console.error("Failed to retrieve downloaded discipline - Data might be corrupt", error);
+        // If data is corrupt, return null so app uses live code instead of crashing
         return null;
     }
   }, [downloadedIds]);

@@ -247,7 +247,6 @@ const LessonSection: React.FC<{
             
             {isOpen && (
                 <div className={`prose prose-lg ${INK_COLOR} max-w-none font-serif leading-loose ${fontSize} px-2 md:px-4`}>
-                    {/* Add a drop-cap style to the first paragraph automatically via CSS logic would be complex here, so we keep it simple but elegant */}
                     {parseTextWithTerms(content)}
                 </div>
             )}
@@ -282,8 +281,32 @@ const LessonReader: React.FC<LessonReaderProps> = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const { speak, pause, resume, cancel, isPlaying, isPaused, supported } = useTTS();
 
+  // Safety check: Ensure module and lessons exist
+  if (!module || !module.lessons || module.lessons.length === 0) {
+      return (
+          <div className="flex items-center justify-center h-full p-8 text-center bg-[#fdfbf7]">
+              <div>
+                  <h2 className="text-xl font-bold text-[#8a1c1c] mb-2">Casharkan lama heli karo</h2>
+                  <p className="text-[#5e5e5e]">Fadlan dib ugu laabo oo dooro cashar kale.</p>
+              </div>
+          </div>
+      );
+  }
+
   const activeLesson = module.lessons[activeLessonIndex];
   
+  // Safety check: Ensure active lesson exists
+  if (!activeLesson) {
+       return (
+          <div className="flex items-center justify-center h-full p-8 text-center bg-[#fdfbf7]">
+              <div>
+                  <h2 className="text-xl font-bold text-[#8a1c1c] mb-2">Cilad: Casharka waa maqan yahay</h2>
+                  <button onClick={() => setActiveLessonIndex(0)} className="text-blue-600 underline">Dib u bilow</button>
+              </div>
+          </div>
+      );
+  }
+
   // Reset state when lesson changes
   useEffect(() => {
     setActiveTab('content');
@@ -327,10 +350,10 @@ const LessonReader: React.FC<LessonReaderProps> = ({
       } else {
           const content = [
               activeLesson.title,
-              activeLesson.structuredContent.whatIsIt.content,
-              activeLesson.structuredContent.whyIsItImportant.content,
-              activeLesson.structuredContent.howItWorks.content,
-              activeLesson.structuredContent.examples.content
+              activeLesson.structuredContent.whatIsIt?.content || '',
+              activeLesson.structuredContent.whyIsItImportant?.content || '',
+              activeLesson.structuredContent.howItWorks?.content || '',
+              activeLesson.structuredContent.examples?.content || ''
           ].join('. ');
           speak(content);
       }
@@ -402,7 +425,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                             <h1 className={`text-4xl md:text-5xl font-serif font-bold ${INK_COLOR} mb-4 leading-tight`}>{activeLesson.title}</h1>
                             <div className="flex items-center justify-center space-x-2 text-sm font-serif text-[#5e5e5e] italic">
                                 <span>Est. Reading Time:</span>
-                                <span className={`${ACCENT_MAROON} font-bold`}>{activeLesson.duration}</span>
+                                <span className={`${ACCENT_MAROON} font-bold`}>{activeLesson.duration || '10 mins'}</span>
                             </div>
                         </div>
 
@@ -437,8 +460,8 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                              </div>
                         </div>
 
-                        {/* Interactive Text Content Sections */}
-                        {activeLesson.structuredContent.whatIsIt.content && (
+                        {/* Interactive Text Content Sections - With Safety Checks */}
+                        {activeLesson.structuredContent?.whatIsIt?.content && (
                             <LessonSection 
                                 title="Definition" 
                                 content={activeLesson.structuredContent.whatIsIt.content} 
@@ -448,7 +471,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                             />
                         )}
                         
-                        {(activeLesson.structuredContent.whyIsItImportant.content) && (
+                        {(activeLesson.structuredContent?.whyIsItImportant?.content) && (
                             <LessonSection 
                                 title="Significance" 
                                 content={activeLesson.structuredContent.whyIsItImportant.content} 
@@ -461,7 +484,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                         {/* Formula Card */}
                         {activeLesson.formula && <FormulaCard formula={activeLesson.formula} />}
 
-                        {(activeLesson.structuredContent.mainParts.content) && (
+                        {(activeLesson.structuredContent?.mainParts?.content) && (
                             <LessonSection 
                                 title="Structure & Components" 
                                 content={activeLesson.structuredContent.mainParts.content} 
@@ -471,7 +494,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                             />
                         )}
 
-                        {(activeLesson.structuredContent.howItWorks.content) && (
+                        {(activeLesson.structuredContent?.howItWorks?.content) && (
                             <LessonSection 
                                 title="Mechanism" 
                                 content={activeLesson.structuredContent.howItWorks.content} 
@@ -481,7 +504,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                             />
                         )}
 
-                        {(activeLesson.structuredContent.examples.content) && (
+                        {(activeLesson.structuredContent?.examples?.content) && (
                             <LessonSection 
                                 title="Case Studies" 
                                 content={activeLesson.structuredContent.examples.content} 
@@ -491,7 +514,7 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                             />
                         )}
 
-                        {(activeLesson.structuredContent.prerequisites.content) && (
+                        {(activeLesson.structuredContent?.prerequisites?.content) && (
                             <LessonSection 
                                 title="Prerequisites" 
                                 content={activeLesson.structuredContent.prerequisites.content} 
@@ -526,9 +549,9 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                                     In this lesson covering <strong>{activeLesson.title}</strong>, we have explored the following fundamental concepts:
                                 </p>
                                 <ul className="list-disc pl-5 space-y-3 mt-4 marker:text-[#8a1c1c]">
-                                    <li><strong className={ACCENT_MAROON}>Definition:</strong> {activeLesson.structuredContent.whatIsIt.content.substring(0, 100)}...</li>
-                                    <li><strong className={ACCENT_MAROON}>Importance:</strong> {activeLesson.structuredContent.whyIsItImportant.content.substring(0, 80)}...</li>
-                                    <li><strong className={ACCENT_MAROON}>Application:</strong> Real-world usage in {activeLesson.structuredContent.examples.content.substring(0, 50)}...</li>
+                                    <li><strong className={ACCENT_MAROON}>Definition:</strong> {activeLesson.structuredContent.whatIsIt?.content?.substring(0, 100) || ''}...</li>
+                                    <li><strong className={ACCENT_MAROON}>Importance:</strong> {activeLesson.structuredContent.whyIsItImportant?.content?.substring(0, 80) || ''}...</li>
+                                    <li><strong className={ACCENT_MAROON}>Application:</strong> Real-world usage in {activeLesson.structuredContent.examples?.content?.substring(0, 50) || 'engineering projects'}...</li>
                                 </ul>
                                 <div className="mt-8 pt-6 border-t border-[#c4bbaa] text-center">
                                     <p className={`font-serif italic ${INK_LIGHT} text-lg`}>
