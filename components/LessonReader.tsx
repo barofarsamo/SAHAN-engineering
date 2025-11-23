@@ -15,26 +15,61 @@ import {
     TextSizeIcon,
     BookmarkIcon,
     ChevronDownIcon,
-    ChevronRightIcon
+    ChevronRightIcon,
+    XIcon
 } from './Icons';
 import { useTTS } from '../hooks/useTTS';
 
 const FormulaCard: React.FC<{ formula: Formula }> = ({ formula }) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    if (!isVisible) {
+        return (
+            <button 
+                onClick={() => setIsVisible(true)}
+                className="w-full bg-base-200 hover:bg-base-300 border border-base-300 rounded-xl p-4 mb-6 flex items-center justify-between transition-all group animate-fade-in shadow-sm"
+            >
+                <div className="flex items-center">
+                    <div className="h-12 w-12 rounded-xl bg-brand-accent/10 flex items-center justify-center mr-4 border border-brand-accent/20">
+                        <span className="font-serif italic font-bold text-brand-accent text-xl">f(x)</span>
+                    </div>
+                    <div className="text-left">
+                        <p className="text-[10px] font-bold text-brand-gray uppercase tracking-wider mb-0.5">Mathematical Model</p>
+                        <h3 className="text-base font-bold text-base-content group-hover:text-brand-secondary transition-colors">{formula.name}</h3>
+                    </div>
+                </div>
+                <div className="flex items-center text-xs font-bold text-brand-secondary bg-brand-secondary/5 px-4 py-2 rounded-lg border border-brand-secondary/10 group-hover:bg-brand-secondary group-hover:text-white transition-all">
+                    Fiiri Qaacidada
+                    <ChevronDownIcon className="h-4 w-4 ml-2" />
+                </div>
+            </button>
+        );
+    }
+
     return (
-        <div className="bg-base-200 rounded-xl border-l-4 border-brand-accent p-6 mb-8 shadow-sm animate-fade-in relative overflow-hidden group">
+        <div className="bg-base-200 rounded-xl border-l-4 border-brand-accent p-6 mb-8 shadow-md animate-fade-in-up relative overflow-hidden group">
+             {/* Close Button */}
+             <button 
+                onClick={() => setIsVisible(false)}
+                className="absolute top-3 right-3 p-2 text-gray-400 hover:text-base-content hover:bg-base-300 rounded-full transition-colors z-20"
+                title="Qari"
+             >
+                 <XIcon className="h-5 w-5" />
+             </button>
+
              {/* Background Pattern */}
              <div className="absolute -right-10 -top-10 opacity-5 transform rotate-12 pointer-events-none">
                 <span className="text-9xl font-serif">∫</span>
              </div>
 
-             <h3 className="flex items-center text-lg font-bold text-base-content mb-4 relative z-10">
-                <span className="p-2 bg-brand-accent/10 rounded-lg mr-3 text-brand-accent font-mono border border-brand-accent/20">f(x)</span>
+             <h3 className="flex items-center text-lg font-bold text-base-content mb-4 relative z-10 pr-8">
+                <span className="p-2 bg-brand-accent/10 rounded-lg mr-3 text-brand-accent font-mono border border-brand-accent/20 text-sm">f(x)</span>
                 {formula.name}
              </h3>
 
              <div className="bg-base-100 p-6 rounded-lg mb-6 text-center border border-base-300 shadow-inner relative z-10">
-                <p className="text-2xl md:text-3xl font-mono font-bold text-brand-primary tracking-wider">{formula.equation}</p>
-                <p className="text-sm text-brand-gray mt-2 font-medium">{formula.description}</p>
+                <p className="text-xl md:text-3xl font-mono font-bold text-brand-primary tracking-wider break-words">{formula.equation}</p>
+                <p className="text-sm text-brand-gray mt-3 font-medium border-t border-base-200 pt-3">{formula.description}</p>
              </div>
 
              <div className="grid md:grid-cols-2 gap-6 relative z-10">
@@ -396,9 +431,6 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                              )}
                         </div>
 
-                        {/* Formula Card - Display if present */}
-                        {activeLesson.formula && <FormulaCard formula={activeLesson.formula} />}
-
                         {/* Interactive Text Content Sections */}
                         {activeLesson.structuredContent.whatIsIt.content && (
                             <LessonSection 
@@ -419,6 +451,9 @@ const LessonReader: React.FC<LessonReaderProps> = ({
                                 onTermClick={onTermClick}
                             />
                         )}
+
+                        {/* Formula Card - Display after basics */}
+                        {activeLesson.formula && <FormulaCard formula={activeLesson.formula} />}
 
                         {(activeLesson.structuredContent.mainParts.content) && (
                             <LessonSection 
